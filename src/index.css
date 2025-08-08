@@ -2,15 +2,15 @@
 
 /* Custom CSS Variables for your mental health theme */
 :root {
-  --primary: #16ce72;
-  --primary-hover: #14b865;
-  --dark-bg: #0f0f0f;
-  --card-bg: #1a1a1a;
+  --primary: #a8d2e0;
+  --primary-hover: #1f14b8;
+  --dark-bg: #bfd3f1;
+  --card-bg: #030b3a;
   --border-color: #2a2a2a;
   --border-secondary: #333333;
   --text-secondary: #a0a0a0;
-  --gradient-primary: linear-gradient(135deg, #16ce72 0%, #14b865 100%);
-  --gradient-dark: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  --gradient-primary: linear-gradient(135deg, #e43b6e 0%, #aa7878 100%);
+  --gradient-dark: linear-gradient(135deg, #93a6db 0%, #0d0e22 100%);
   --shadow-primary: 0 4px 15px rgba(22, 206, 114, 0.3);
   --shadow-hover: 0 10px 25px rgba(22, 206, 114, 0.2);
 }

@@ -3,77 +3,137 @@ import Hero from '../components/Hero';
 import SectionTitle from '../components/SectionTitle';
 import ServiceCard from '../components/ServiceCard';
 import { motion } from 'framer-motion';
-import { 
-  FiHome, 
-  FiUsers, 
-  FiHeart, 
-  FiBriefcase 
+import {
+  FiHome,
+  FiUsers,
+  FiHeart,
+  FiBriefcase,
 } from 'react-icons/fi';
 
 const Home = () => {
   const services = [
-    { 
-      icon: <FiHome className="w-6 h-6" />, 
-      title: "Inpatient Rehabilitation", 
-      description: "Comprehensive care in a supportive environment." 
+    {
+      icon: <FiHome className="w-6 h-6" />,
+      title: 'Inpatient Rehabilitation',
+      description: 'Comprehensive care in a supportive environment.',
     },
-    { 
-      icon: <FiUsers className="w-6 h-6" />, 
-      title: "Counseling", 
-      description: "Individual and group therapy sessions." 
+    {
+      icon: <FiUsers className="w-6 h-6" />,
+      title: 'Counseling',
+      description: 'Individual and group therapy sessions.',
     },
-    { 
-      icon: <FiHeart className="w-6 h-6" />, 
-      title: "Wellness Programs", 
-      description: "Holistic approaches to enhance well-being." 
+    {
+      icon: <FiHeart className="w-6 h-6" />,
+      title: 'Wellness Programs',
+      description: 'Holistic approaches to enhance well-being.',
     },
-    { 
-      icon: <FiBriefcase className="w-6 h-6" />, 
-      title: "Corporate Wellness", 
-      description: "Mental health solutions for your workplace." 
+    {
+      icon: <FiBriefcase className="w-6 h-6" />,
+      title: 'Corporate Wellness',
+      description: 'Mental health solutions for your workplace.',
     },
   ];
 
+  const testimonials = [
+    {
+      name: 'Sarah M.',
+      location: 'Nairobi, Kenya',
+      content:
+        'The team at Momentum Wellness helped me through a difficult time in my life. Their compassionate approach made all the difference.',
+      initials: 'SM',
+    },
+    {
+      name: 'David K.',
+      location: 'Mombasa, Kenya',
+      content:
+        "Professional, caring, and effective. I couldn't have asked for better support during my recovery journey.",
+      initials: 'DK',
+    },
+    {
+      name: 'Grace W.',
+      location: 'Kisumu, Kenya',
+      content:
+        'The wellness programs transformed how I approach mental health. I now have tools that help me every day.',
+      initials: 'GW',
+    },
+  ];
+
+  const stats = [
+    { number: '500+', label: 'Lives Changed' },
+    { number: '15+', label: 'Years Experience' },
+    { number: '98%', label: 'Success Rate' },
+    { number: '24/7', label: 'Support Available' },
+  ];
+
   return (
-    <div className="px-4 md:px-10 lg:px-20 flex flex-1 justify-center py-5">
-      <div className="layout-content-container flex flex-col max-w-6xl flex-1">
+    <main className="px-4 md:px-10 lg:px-20 py-8 flex justify-center">
+      <div className="layout-content-container flex flex-col max-w-6xl w-full">
         <Hero />
+
         <SectionTitle>Our Services</SectionTitle>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service, index) => (
-            <ServiceCard
+            <motion.div
               key={index}
-              icon={service.icon}
-              title={service.title}
-              description={service.description}
-            />
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+            >
+              <ServiceCard
+                icon={service.icon}
+                title={service.title}
+                description={service.description}
+              />
+            </motion.div>
           ))}
         </div>
-        
-        {/* Testimonials Section */}
+
+        <SectionTitle>Our Impact</SectionTitle>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 py-10">
+          {stats.map((stat, index) => (
+            <motion.div
+              key={index}
+              className="stat-card"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+            >
+              <div className="stat-number">{stat.number}</div>
+              <div className="stat-label">{stat.label}</div>
+            </motion.div>
+          ))}
+        </div>
+
         <SectionTitle>What Our Clients Say</SectionTitle>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
-          {[1, 2, 3].map((item) => (
-            <motion.div 
-              key={item}
-              className="rounded-xl bg-cardBg p-6 border border-borderColor"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: item * 0.1 }}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-10">
+          {testimonials.map((t, index) => (
+            <motion.div
+              key={index}
+              className="testimonial-card"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
+                <div className="testimonial-avatar">{t.initials}</div>
                 <div>
-                  <h3 className="text-white font-bold">John D.</h3>
-                  <p className="text-textSecondary text-sm">Nairobi, Kenya</p>
+                  <h3 className="testimonial-author">{t.name}</h3>
+                  <p className="testimonial-location">{t.location}</p>
                 </div>
               </div>
-              <p className="text-textSecondary">
-                "The team at Momentum Wellness helped me through a difficult time in my life. Their compassionate approach made all the difference."
-              </p>
-              <div className="flex text-yellow-400 mt-3">
+              <p className="testimonial-content">"{t.content}"</p>
+              <div className="flex text-yellow-500 mt-3" aria-label="5 star rating">
                 {[...Array(5)].map((_, i) => (
-                  <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <svg
+                    key={i}
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
                 ))}
@@ -81,8 +141,34 @@ const Home = () => {
             </motion.div>
           ))}
         </div>
+
+        <motion.div
+          className="mt-16 p-8 rounded-xl"
+          style={{ background: 'var(--gradient-primary)' }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="text-center text-white">
+            <h2 className="text-3xl font-bold mb-4">
+              Ready to Start Your Wellness Journey?
+            </h2>
+            <p className="text-white/90 mb-6 max-w-2xl mx-auto">
+              Take the first step toward better mental health. Our professionals are here to support you every step of the way.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <button className="btn-secondary bg-white text-gray-800 hover:bg-gray-100 border-white">
+                Schedule Consultation
+              </button>
+              <button className="btn-secondary border-white text-white hover:bg-white hover:text-gray-800">
+                Learn More
+              </button>
+            </div>
+          </div>
+        </motion.div>
       </div>
-    </div>
+    </main>
   );
 };
 
