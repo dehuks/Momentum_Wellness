@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import SectionTitle from '../components/SectionTitle';
 import { motion } from 'framer-motion';
 import { FiMapPin, FiPhone, FiMail, FiClock } from 'react-icons/fi';
+import ConatctImage from '../assets/contact.png'; 
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -103,7 +104,7 @@ const Contact = () => {
             transition={{ duration: 0.5 }}
           >
             <img
-              src="/assets/images/contact-hero.jpg"
+              src={ConatctImage}
               alt="Momentum Wellness Center"
               className="w-full h-full object-cover"
             />
