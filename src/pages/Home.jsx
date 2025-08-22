@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Hero from '../components/Hero';
 import SectionTitle from '../components/SectionTitle';
 import ServiceCard from '../components/ServiceCard';
@@ -10,7 +10,44 @@ import {
   FiBriefcase,
 } from 'react-icons/fi';
 
+// Animated Counter Component
+const AnimatedCounter = ({ end, duration = 2000, suffix = '', isVisible }) => {
+  const [count, setCount] = useState(0);
+  const countRef = useRef(null);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    let startTime = null;
+    const startCount = 0;
+    
+    const animate = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      
+      // Use easeOutQuart easing for smooth animation
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      const currentCount = Math.floor(easeOutQuart * end);
+      
+      setCount(currentCount);
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        setCount(end);
+      }
+    };
+    
+    requestAnimationFrame(animate);
+  }, [isVisible, end, duration]);
+
+  return <span>{count}{suffix}</span>;
+};
+
 const Home = () => {
+  const [statsVisible, setStatsVisible] = useState(false);
+  const statsRef = useRef(null);
+
   const services = [
     {
       icon: <FiHome className="w-6 h-6" />,
@@ -59,11 +96,36 @@ const Home = () => {
   ];
 
   const stats = [
-    { number: '500+', label: 'Lives Changed' },
-    { number: '15+', label: 'Years Experience' },
-    { number: '98%', label: 'Success Rate' },
-    { number: '24/7', label: 'Support Available' },
+    { number: 500, suffix: '+', label: 'Lives Changed', animated: true },
+    { number: 15, suffix: '+', label: 'Years Experience', animated: true },
+    { number: 98, suffix: '%', label: 'Success Rate', animated: true },
+    { number: '24/7', suffix: '', label: 'Support Available', animated: false },
   ];
+
+  // Intersection Observer to trigger animation when stats section is visible
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !statsVisible) {
+          setStatsVisible(true);
+        }
+      },
+      {
+        threshold: 0.3, // Trigger when 30% of the section is visible
+        rootMargin: '0px 0px -100px 0px' // Start animation a bit before fully visible
+      }
+    );
+
+    if (statsRef.current) {
+      observer.observe(statsRef.current);
+    }
+
+    return () => {
+      if (statsRef.current) {
+        observer.unobserve(statsRef.current);
+      }
+    };
+  }, [statsVisible]);
 
   return (
     <main className="px-4 md:px-10 lg:px-20 py-8 flex justify-center">
@@ -90,7 +152,10 @@ const Home = () => {
         </div>
 
         <SectionTitle>Our Impact</SectionTitle>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 py-10">
+        <div 
+          ref={statsRef}
+          className="grid grid-cols-1 md:grid-cols-4 gap-6 py-10"
+        >
           {stats.map((stat, index) => (
             <motion.div
               key={index}
@@ -100,7 +165,18 @@ const Home = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
             >
-              <div className="stat-number">{stat.number}</div>
+              <div className="stat-number">
+                {stat.animated ? (
+                  <AnimatedCounter
+                    end={stat.number}
+                    suffix={stat.suffix}
+                    duration={2000 + index * 200} // Stagger the animations slightly
+                    isVisible={statsVisible}
+                  />
+                ) : (
+                  `${stat.number}${stat.suffix}`
+                )}
+              </div>
               <div className="stat-label">{stat.label}</div>
             </motion.div>
           ))}

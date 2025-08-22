@@ -9,6 +9,7 @@ import {
 } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import aboutImage from '../assets/about.png'; // Import the image
+import aboutImage2 from '../assets/image.png'; // Import the image
 
 const About = () => {
   const values = [
@@ -37,30 +38,30 @@ const About = () => {
   return (
     <div className="px-4 md:px-10 lg:px-20 flex flex-1 justify-center py-5">
       <div className="layout-content-container flex flex-col max-w-6xl flex-1">
+        
         {/* Header Section */}
-        <div className="flex flex-wrap justify-between gap-6 p-4">
-          <div className="flex min-w-72 flex-col gap-3">
-            <motion.h1 
-              className="page-title"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              About Us
-            </motion.h1>
-            <motion.p 
-              className="page-description"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              Momentum Wellness is a leading mental health service provider in Kenya, dedicated to promoting emotional well-being and resilience. Our team of experienced professionals offers comprehensive care tailored to individual needs.
-            </motion.p>
-          </div>
+        <div className="flex flex-col items-center text-center gap-6 p-4">
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <SectionTitle>About Us</SectionTitle>
+          </motion.div>
+
+          <motion.p 
+            className="page-description max-w-2xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            Momentum Wellness is a leading mental health service provider in Kenya, dedicated to promoting emotional well-being and resilience. Our team of experienced professionals offers comprehensive care tailored to individual needs.
+          </motion.p>
+
           <motion.img 
-            src={aboutImage}
+            src={aboutImage2}
             alt="About Momentum Wellness"
-            className="rounded-xl w-64 h-64 md:w-80 md:h-80 object-cover"
+            className="rounded-xl w-full max-w-4xl h-72 md:h-96 object-cover"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
@@ -69,9 +70,13 @@ const About = () => {
 
         {/* Background Section */}
         <SectionTitle>Our Background</SectionTitle>
-        <p className="content-text">
-          Founded in 2018, Momentum Wellness emerged from a shared vision among a group of mental health experts to address the growing need for accessible and quality mental health services in Kenya. We recognized the stigma surrounding mental health and aimed to create a safe, supportive environment where individuals could seek help without fear or judgment. Over the years, we have expanded our services and reach, becoming a trusted resource for individuals, families, and communities.
-        </p>
+        <p className="content-text text-center">
+  Founded in 2018, Momentum Wellness emerged from a shared vision among a group of mental health experts 
+  to address the growing need for accessible and quality mental health services in Kenya. 
+  We recognized the stigma surrounding mental health and aimed to create a safe, supportive environment 
+  where individuals could seek help without fear or judgment. Over the years, we have expanded our 
+  services and reach, becoming a trusted resource for individuals, families, and communities.
+</p>
 
         {/* About Image Full Width */}
         <div className="flex w-full my-6">
@@ -113,11 +118,11 @@ const About = () => {
 
         {/* Core Beliefs */}
         <SectionTitle>Our Core Beliefs</SectionTitle>
-        <p className="content-text">
+        <p className="content-text text-center">
           At Momentum Wellness, we believe that mental health is essential to overall well-being. We are committed to providing personalized care that addresses the unique needs of each individual. Our approach is holistic, focusing on the interconnectedness of mind, body, and spirit. We believe in the power of resilience and the capacity of individuals to overcome challenges and lead fulfilling lives.
         </p>
 
-        {/* Team Section */}
+        {/* Team Section (optional placeholder)
         <SectionTitle>Meet Our Team</SectionTitle>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 p-4">
           {[1, 2, 3, 4].map((item) => (
@@ -134,7 +139,10 @@ const About = () => {
               <p className="text-textSecondary text-sm mt-2">10+ years of experience in cognitive behavioral therapy</p>
             </motion.div>
           ))}
-        </div>
+        </div> 
+        */}
+
+        <div className="h-10" /> {/* Spacer at the bottom */}
       </div>
     </div>
   );
