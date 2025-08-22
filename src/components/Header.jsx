@@ -53,7 +53,7 @@ const Header = () => {
         {/* Logo Section */}
         <div className="flex items-center gap-4">
           <img src={logo} alt="Mowet Kenya Logo" className="h-10 w-auto" />
-          <h2 className="text-white text-lg font-bold tracking-tight">Mowet Kenya</h2>
+          <h2 className="text-white text-lg font-bold tracking-tight">MOWET Kenya</h2>
         </div>
 
         {/* Desktop Navigation */}

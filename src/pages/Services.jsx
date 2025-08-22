@@ -1,6 +1,5 @@
 import React from 'react';
 import SectionTitle from '../components/SectionTitle';
-import ServiceCard from '../components/ServiceCard';
 import { 
   FiHome, 
   FiUsers, 
@@ -57,30 +56,29 @@ const Services = () => {
       <div className="layout-content-container flex flex-col max-w-6xl flex-1">
         
         {/* Header Section */}
-        <div className="flex flex-wrap justify-between gap-6 p-4">
-          <div className="flex min-w-72 flex-col gap-3">
-            <motion.h1 
-              className="page-title"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              Our Services
-            </motion.h1>
-            <motion.p 
-              className="page-description"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              Explore our comprehensive range of mental health services designed to support your journey to well-being. 
-              Each program is tailored to meet individual needs with evidence-based approaches.
-            </motion.p>
-          </div>
+        <div className="flex flex-col items-center text-center gap-6 p-4">
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <SectionTitle>Our Services</SectionTitle>
+          </motion.div>
+
+          <motion.p 
+            className="page-description max-w-2xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            Explore our comprehensive range of mental health services designed to support your journey to well-being. 
+            Each program is tailored to meet individual needs with evidence-based approaches.
+          </motion.p>
+
           <motion.img 
             src={serviceImage}
             alt="Our services"
-            className="rounded-xl w-64 h-64 md:w-80 md:h-80 object-cover"
+            className="rounded-xl w-full max-w-4xl h-72 md:h-96 object-cover"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
