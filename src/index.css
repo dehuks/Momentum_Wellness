@@ -2,18 +2,28 @@
 
 /* Custom CSS Variables for your mental health theme */
 :root {
-  --primary: #16ce72;
-  --primary-hover: #14b865;
-  --dark-bg: #0f0f0f;
-  --card-bg: #1a1a1a;
-  --border-color: #2a2a2a;
-  --border-secondary: #333333;
-  --text-secondary: #a0a0a0;
-  --gradient-primary: linear-gradient(135deg, #16ce72 0%, #14b865 100%);
-  --gradient-dark: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-  --shadow-primary: 0 4px 15px rgba(22, 206, 114, 0.3);
-  --shadow-hover: 0 10px 25px rgba(22, 206, 114, 0.2);
+  --primary: #3B82F6; /* Blue */
+  --primary-hover: #2563EB; /* Darker Blue */
+  --accent: #FDBA74; /* Peach */
+  --accent-hover: #FB923C; /* Darker Peach */
+  
+  --dark-bg: #1c2842; /* Deep Slate */
+  --card-bg: #0f1011; /* Slightly lighter for cards */
+  --border-color: #334155;
+  --border-secondary: #475569;
+
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+
+  --gradient-primary: linear-gradient(135deg, #082041 0%, #2563EB 100%);
+  --gradient-accent: linear-gradient(135deg, #ecd6be 0%, #503c2d 100%);
+  --gradient-dark: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+
+  --shadow-primary: 0 4px 15px rgba(59, 130, 246, 0.3);
+  --shadow-accent: 0 4px 15px rgba(251, 146, 60, 0.3);
+  --shadow-hover: 0 10px 25px rgba(59, 130, 246, 0.2);
 }
+
 
 /* Button Components */
 .btn-primary {
@@ -88,7 +98,7 @@
   gap: 2rem;
   padding: 4rem 1rem;
   text-align: center;
-  background: radial-gradient(ellipse at center, rgba(22, 206, 114, 0.1) 0%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(28, 41, 180, 0.1) 0%, transparent 70%);
 }
 
 .hero-content {
@@ -104,8 +114,8 @@
   font-weight: 900;
   line-height: 1.1;
   letter-spacing: -0.033em;
-  color: white;
-  background: linear-gradient(135deg, #ffffff 0%, #16ce72 100%);
+  color: rgb(147, 175, 216);
+  background: linear-gradient(135deg, #e9d2d2 0%, #7a86a1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

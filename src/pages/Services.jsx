@@ -7,9 +7,10 @@ import {
   FiBriefcase, 
   FiHeart, 
   FiZap,         
-  FiUserCheck     
+  FiUserCheck
 } from 'react-icons/fi';
 import { motion } from 'framer-motion';
+import serviceImage from '../assets/services.png'; 
 
 const Services = () => {
   const services = [
@@ -37,23 +38,25 @@ const Services = () => {
       description: "Holistic approaches to enhance overall mental and physical well-being.",
       details: "Our wellness programs include mindfulness meditation, yoga therapy, nutrition counseling, art therapy, and stress reduction workshops. Designed to promote resilience and prevent burnout."
     },
-    { 
-      icon: <FiBrain className="w-8 h-8" />, 
-      title: "Neuropsychological Assessments", 
+    {
+      icon: <FiZap className="w-8 h-8" />,
+      title: "Neuropsychological Assessments",
       description: "Evaluations to assess cognitive functions and identify neurological issues.",
       details: "Comprehensive assessments for memory, attention, executive functioning, and more. Used to diagnose conditions like ADHD, dementia, traumatic brain injuries, and learning disabilities."
     },
-    { 
-      icon: <FiHandshake className="w-8 h-8" />, 
-      title: "Corporate Wellness", 
+    {
+      icon: <FiUserCheck className="w-8 h-8" />,
+      title: "Corporate Wellness",
       description: "Workplace programs to enhance employee mental health and productivity.",
       details: "Customized programs for organizations including stress management workshops, mental health first aid training, leadership coaching, and confidential employee counseling services."
-    },
+    }    
   ];
 
   return (
     <div className="px-4 md:px-10 lg:px-20 flex flex-1 justify-center py-5">
       <div className="layout-content-container flex flex-col max-w-6xl flex-1">
+        
+        {/* Header Section */}
         <div className="flex flex-wrap justify-between gap-6 p-4">
           <div className="flex min-w-72 flex-col gap-3">
             <motion.h1 
@@ -74,14 +77,17 @@ const Services = () => {
               Each program is tailored to meet individual needs with evidence-based approaches.
             </motion.p>
           </div>
-          <motion.div 
-            className="bg-gray-200 border-2 border-dashed rounded-xl w-64 h-64 md:w-80 md:h-80"
+          <motion.img 
+            src={serviceImage}
+            alt="Our services"
+            className="rounded-xl w-64 h-64 md:w-80 md:h-80 object-cover"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
           />
         </div>
         
+        {/* Services Grid */}
         <SectionTitle>Comprehensive Mental Health Services</SectionTitle>
         <p className="content-text mb-8">
           At Momentum Wellness, we provide a full spectrum of mental health services delivered by experienced professionals. 
@@ -116,8 +122,8 @@ const Services = () => {
             </motion.div>
           ))}
         </div>
-        
-        {/* Pricing Section */}
+
+        {/* Pricing Plans */}
         <SectionTitle>Transparent Pricing</SectionTitle>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {[
@@ -137,8 +143,8 @@ const Services = () => {
               <ul className="flex-1 mb-6">
                 {plan.features.map((feature, i) => (
                   <li key={i} className="flex items-start mb-2">
-                    <svg className="w-5 h-5 text-primary mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                    <svg className="w-5 h-5 text-primary mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
                     <span className="text-textSecondary">{feature}</span>
                   </li>
@@ -150,7 +156,7 @@ const Services = () => {
             </motion.div>
           ))}
         </div>
-        
+
         {/* FAQ Section */}
         <SectionTitle>Frequently Asked Questions</SectionTitle>
         <div className="mb-12">
@@ -181,8 +187,8 @@ const Services = () => {
             >
               <div className="flex justify-between items-center cursor-pointer">
                 <h3 className="text-white font-medium text-lg">{faq.question}</h3>
-                <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
               <p className="text-textSecondary mt-2">{faq.answer}</p>

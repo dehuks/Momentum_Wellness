@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import SectionTitle from '../components/SectionTitle';
 import { motion } from 'framer-motion';
 import { FiMapPin, FiPhone, FiMail, FiClock } from 'react-icons/fi';
+import ConatctImage from '../assets/contact.png'; 
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -10,7 +11,7 @@ const Contact = () => {
     phone: '',
     message: ''
   });
-  
+
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -18,7 +19,7 @@ const Contact = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
@@ -27,47 +28,47 @@ const Contact = () => {
 
   const validate = () => {
     const newErrors = {};
-    
+
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
     }
-    
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email';
     }
-    
+
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone number is required';
     } else if (!/^[0-9+]{8,15}$/.test(formData.phone)) {
       newErrors.phone = 'Please enter a valid phone number';
     }
-    
+
     if (!formData.message.trim()) {
       newErrors.message = 'Message is required';
     }
-    
+
     return newErrors;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const validationErrors = validate();
-    
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-    
+
     setIsSubmitting(true);
-    
+
     // Simulate form submission
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitSuccess(true);
       setFormData({ name: '', email: '', phone: '', message: '' });
-      
+
       // Reset success message after 5 seconds
       setTimeout(() => setSubmitSuccess(false), 5000);
     }, 1500);
@@ -78,7 +79,7 @@ const Contact = () => {
       <div className="layout-content-container flex flex-col max-w-6xl flex-1">
         <div className="flex flex-wrap justify-between gap-6 p-4">
           <div className="flex min-w-72 flex-col gap-3">
-            <motion.h1 
+            <motion.h1
               className="page-title"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -86,24 +87,30 @@ const Contact = () => {
             >
               Contact Us
             </motion.h1>
-            <motion.p 
+            <motion.p
               className="page-description"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              We're here to help. Reach out to us with any questions or to schedule an appointment. 
+              We're here to help. Reach out to us with any questions or to schedule an appointment.
               Our team typically responds within 24 hours.
             </motion.p>
           </div>
           <motion.div 
-            className="bg-gray-200 border-2 border-dashed rounded-xl w-64 h-64 md:w-80 md:h-80"
+            className="w-64 h-64 md:w-80 md:h-80 rounded-xl overflow-hidden border border-borderColor"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-          />
+          >
+            <img
+              src={ConatctImage}
+              alt="Momentum Wellness Center"
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
         </div>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Contact Form */}
           <motion.div
@@ -112,7 +119,7 @@ const Contact = () => {
             transition={{ duration: 0.5 }}
           >
             <SectionTitle>Send Us a Message</SectionTitle>
-            
+
             {submitSuccess && (
               <div className="mb-6 p-4 bg-green-900/30 border border-green-500 rounded-lg">
                 <div className="flex items-center text-green-400">
@@ -123,7 +130,7 @@ const Contact = () => {
                 </div>
               </div>
             )}
-            
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-white mb-2">Name</label>
@@ -139,7 +146,7 @@ const Contact = () => {
                 />
                 {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name}</p>}
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-white mb-2">Email</label>
@@ -155,7 +162,7 @@ const Contact = () => {
                   />
                   {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
                 </div>
-                
+
                 <div>
                   <label className="block text-white mb-2">Phone</label>
                   <input
@@ -171,7 +178,7 @@ const Contact = () => {
                   {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone}</p>}
                 </div>
               </div>
-              
+
               <div>
                 <label className="block text-white mb-2">Message</label>
                 <textarea
@@ -186,7 +193,7 @@ const Contact = () => {
                 ></textarea>
                 {errors.message && <p className="text-red-400 text-sm mt-1">{errors.message}</p>}
               </div>
-              
+
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -204,7 +211,7 @@ const Contact = () => {
               </button>
             </form>
           </motion.div>
-          
+
           {/* Contact Information */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
@@ -212,7 +219,7 @@ const Contact = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <SectionTitle>Our Location</SectionTitle>
-            
+
             <div className="bg-cardBg border border-borderColor rounded-lg p-6 mb-6">
               <div className="flex items-start mb-4">
                 <div className="text-primary mr-3 mt-1">
@@ -222,12 +229,12 @@ const Contact = () => {
                   <h3 className="text-white font-medium mb-1">Headquarters</h3>
                   <p className="text-textSecondary">
                     Momentum Wellness Center<br />
-                    123 Serenity Lane, Westlands<br />
-                    Nairobi, Kenya
+                    P.O. BOX 514-00206 <br />
+                    Kiserian, Kenya
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex items-start mb-4">
                 <div className="text-primary mr-3 mt-1">
                   <FiPhone className="w-5 h-5" />
@@ -235,12 +242,11 @@ const Contact = () => {
                 <div>
                   <h3 className="text-white font-medium mb-1">Phone</h3>
                   <p className="text-textSecondary">
-                    +254 712 345 678<br />
-                    +254 734 567 890 (Emergency)
+                    +254 758 810 232<br />
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex items-start mb-4">
                 <div className="text-primary mr-3 mt-1">
                   <FiMail className="w-5 h-5" />
@@ -253,7 +259,7 @@ const Contact = () => {
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex items-start">
                 <div className="text-primary mr-3 mt-1">
                   <FiClock className="w-5 h-5" />
@@ -268,12 +274,23 @@ const Contact = () => {
                 </div>
               </div>
             </div>
-            
-            <div className="bg-gray-200 border-2 border-dashed rounded-xl w-full h-64 mb-4" />
+
+            <div className="rounded-xl overflow-hidden border border-borderColor mb-4">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3988.4123456789!2d36.6901666!3d-1.4116111!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMcKwMjQnNDEuOCJTIDM2wrA0MScyNC42IkU!5e0!3m2!1sen!2ske!4v1690000000000!5m2!1sen!2ske"
+                width="100%"
+                height="256"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Headquarters Map"
+              />
+            </div>
             <p className="text-textSecondary text-sm text-center">
               View on Google Maps
             </p>
-            
+
             <SectionTitle className="mt-8">Emergency Contact</SectionTitle>
             <div className="bg-cardBg border border-borderColor rounded-lg p-6">
               <p className="text-textSecondary mb-4">
@@ -290,14 +307,29 @@ const Contact = () => {
             </div>
           </motion.div>
         </div>
-        
+
         {/* Branch Locations */}
         <SectionTitle>Our Branches</SectionTitle>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {[
-            { city: "Nairobi", address: "123 Serenity Lane, Westlands", phone: "+254 712 345 678" },
-            { city: "Mombasa", address: "456 Coral Road, Nyali", phone: "+254 734 567 890" },
-            { city: "Kisumu", address: "789 Lakeview Drive", phone: "+254 721 234 567" },
+            { 
+              city: "Nairobi", 
+              address: "123 Serenity Lane, Westlands", 
+              phone: "+254 712 345 678",
+              mapSrc: "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3988.4123456789!2d36.6901666!3d-1.4116111!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMcKwMjQnNDEuOCJTIDM2wrA0MScyNC42IkU!5e0!3m2!1sen!2ske!4v1690000000000!5m2!1sen!2ske"
+            },
+            { 
+              city: "Mombasa", 
+              address: "456 Coral Road, Nyali", 
+              phone: "+254 734 567 890",
+              mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3979.8234567890123!2d39.7031119!3d-4.0434771!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x184012a6b7445dc1%3A0x940b62a3c8efde21!2sNyali%2C%20Mombasa!5e0!3m2!1sen!2ske!4v1690000000001!5m2!1sen!2ske"
+            },
+            { 
+              city: "Kisumu", 
+              address: "789 Lakeview Drive", 
+              phone: "+254 721 234 567",
+              mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.1234567890123!2d34.7680147!3d-0.0917012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182aa4b7445dc1%3A0x940b62a3c8efde22!2sKisumu%2C%20Kenya!5e0!3m2!1sen!2ske!4v1690000000002!5m2!1sen!2ske"
+            },
           ].map((branch, index) => (
             <motion.div 
               key={index}
@@ -307,7 +339,18 @@ const Contact = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <div className="flex items-start mb-4">
-                <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 mr-4" />
+                <div className="w-16 h-16 mr-4 rounded-lg overflow-hidden border border-borderColor">
+                  <iframe
+                    src={branch.mapSrc}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title={`${branch.city} Branch Map`}
+                  />
+                </div>
                 <div>
                   <h3 className="text-white text-lg font-bold">{branch.city}</h3>
                   <p className="text-textSecondary text-sm mt-1">{branch.address}</p>
