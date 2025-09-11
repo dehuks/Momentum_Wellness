@@ -14,37 +14,37 @@ import serviceImage from '../assets/services.png';
 const Services = () => {
   const services = [
     { 
-      icon: <FiHome className="w-8 h-8" />, 
+      icon: <FiHome className="w-8 h-8 text-[var(--primary)]" />, 
       title: "Inpatient Rehabilitation", 
       description: "Comprehensive residential treatment for severe mental health conditions in a supportive environment.",
       details: "Our inpatient program provides 24/7 care with a multidisciplinary team including psychiatrists, psychologists, nurses, and therapists. Patients receive personalized treatment plans, medication management, group therapy, and life skills training."
     },
     { 
-      icon: <FiUsers className="w-8 h-8" />, 
+      icon: <FiUsers className="w-8 h-8 text-[var(--primary)]" />, 
       title: "Psychological Counseling", 
       description: "Individual and group therapy sessions to address emotional and behavioral challenges.",
       details: "We offer evidence-based therapies including CBT, DBT, and trauma-focused therapy. Our counselors specialize in depression, anxiety, PTSD, relationship issues, and more. Both in-person and telehealth options available."
     },
     { 
-      icon: <FiBriefcase className="w-8 h-8" />, 
+      icon: <FiBriefcase className="w-8 h-8 text-[var(--primary)]" />, 
       title: "Occupational Therapy", 
       description: "Therapy focused on improving daily living skills and functional abilities.",
       details: "Our occupational therapists help clients develop or regain skills needed for daily living and work. This includes cognitive rehabilitation, stress management techniques, and adaptive strategies for mental health challenges."
     },
     { 
-      icon: <FiHeart className="w-8 h-8" />, 
+      icon: <FiHeart className="w-8 h-8 text-[var(--primary)]" />, 
       title: "Wellness Programs", 
       description: "Holistic approaches to enhance overall mental and physical well-being.",
       details: "Our wellness programs include mindfulness meditation, yoga therapy, nutrition counseling, art therapy, and stress reduction workshops. Designed to promote resilience and prevent burnout."
     },
     {
-      icon: <FiZap className="w-8 h-8" />,
+      icon: <FiZap className="w-8 h-8 text-[var(--primary)]" />,
       title: "Neuropsychological Assessments",
       description: "Evaluations to assess cognitive functions and identify neurological issues.",
       details: "Comprehensive assessments for memory, attention, executive functioning, and more. Used to diagnose conditions like ADHD, dementia, traumatic brain injuries, and learning disabilities."
     },
     {
-      icon: <FiUserCheck className="w-8 h-8" />,
+      icon: <FiUserCheck className="w-8 h-8 text-[var(--primary)]" />,
       title: "Corporate Wellness",
       description: "Workplace programs to enhance employee mental health and productivity.",
       details: "Customized programs for organizations including stress management workshops, mental health first aid training, leadership coaching, and confidential employee counseling services."
@@ -52,8 +52,8 @@ const Services = () => {
   ];
 
   return (
-    <div className="px-4 md:px-10 lg:px-20 flex flex-1 justify-center py-5">
-      <div className="layout-content-container flex flex-col max-w-6xl flex-1">
+    <div className="px-4 md:px-10 lg:px-20 flex flex-1 justify-center py-5 bg-[var(--light-bg)]">
+      <div className="layout-content-container flex flex-col max-w-6xl flex-1 text-[var(--text-primary)]">
         
         {/* Header Section */}
         <div className="flex flex-col items-center text-center gap-6 p-4">
@@ -66,7 +66,7 @@ const Services = () => {
           </motion.div>
 
           <motion.p 
-            className="page-description max-w-2xl"
+            className="page-description max-w-2xl text-[var(--text-secondary)]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -78,7 +78,7 @@ const Services = () => {
           <motion.img 
             src={serviceImage}
             alt="Our services"
-            className="rounded-xl w-full max-w-4xl h-72 md:h-96 object-cover"
+            className="rounded-xl w-full max-w-4xl h-72 md:h-96 object-cover shadow-md"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
@@ -87,7 +87,7 @@ const Services = () => {
         
         {/* Services Grid */}
         <SectionTitle>Comprehensive Mental Health Services</SectionTitle>
-        <p className="content-text mb-8">
+        <p className="content-text mb-8 text-[var(--text-secondary)]">
           At Momentum Wellness, we provide a full spectrum of mental health services delivered by experienced professionals. 
           Our evidence-based approaches are designed to address the unique needs of each individual, helping you achieve sustainable 
           mental wellness and improved quality of life.
@@ -97,7 +97,7 @@ const Services = () => {
           {services.map((service, index) => (
             <motion.div 
               key={index}
-              className="service-card"
+              className="service-card bg-[var(--card-bg)] border border-[var(--border-color)] rounded-xl p-6"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -106,13 +106,13 @@ const Services = () => {
                 boxShadow: "0 10px 25px rgba(22, 206, 114, 0.2)"
               }}
             >
-              <div className="service-icon text-primary">
+              <div className="service-icon mb-3">
                 {service.icon}
               </div>
               <div className="service-content">
-                <h2 className="service-title">{service.title}</h2>
-                <p className="service-description mb-3">{service.description}</p>
-                <p className="text-textSecondary text-sm">{service.details}</p>
+                <h2 className="service-title text-[var(--text-primary)] font-semibold">{service.title}</h2>
+                <p className="service-description mb-3 text-[var(--text-secondary)]">{service.description}</p>
+                <p className="text-[var(--text-secondary)] text-sm">{service.details}</p>
               </div>
               <button className="btn-primary mt-4 w-full">
                 <span>Learn More</span>
@@ -131,20 +131,20 @@ const Services = () => {
           ].map((plan, index) => (
             <motion.div 
               key={index}
-              className="rounded-xl bg-cardBg p-6 border border-borderColor flex flex-col"
+              className="rounded-xl bg-[var(--card-bg)] p-6 border border-[var(--border-color)] flex flex-col"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <h3 className="text-white text-xl font-bold mb-2">{plan.title}</h3>
-              <div className="text-primary text-2xl font-bold mb-4">{plan.price}</div>
+              <h3 className="text-[var(--text-primary)] text-xl font-bold mb-2">{plan.title}</h3>
+              <div className="text-[var(--primary)] text-2xl font-bold mb-4">{plan.price}</div>
               <ul className="flex-1 mb-6">
                 {plan.features.map((feature, i) => (
                   <li key={i} className="flex items-start mb-2">
-                    <svg className="w-5 h-5 text-primary mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-[var(--primary)] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-textSecondary">{feature}</span>
+                    <span className="text-[var(--text-secondary)]">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -178,18 +178,18 @@ const Services = () => {
           ].map((faq, index) => (
             <motion.div 
               key={index}
-              className="border-b border-borderColor py-4"
+              className="border-b border-[var(--border-color)] py-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
               <div className="flex justify-between items-center cursor-pointer">
-                <h3 className="text-white font-medium text-lg">{faq.question}</h3>
-                <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <h3 className="font-medium text-lg text-[var(--text-primary)]">{faq.question}</h3>
+                <svg className="w-5 h-5 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
-              <p className="text-textSecondary mt-2">{faq.answer}</p>
+              <p className="text-[var(--text-secondary)] mt-2">{faq.answer}</p>
             </motion.div>
           ))}
         </div>

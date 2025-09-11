@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiMenu, FiX, FiSun, FiMoon } from 'react-icons/fi';
+import { FiMenu, FiX } from 'react-icons/fi';
 import logo from '../assets/mowet_logo.png';
 
 const navItems = [
@@ -30,10 +30,8 @@ const itemVariants = {
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
-  const toggleTheme = () => setIsDark(!isDark);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : 'auto';
@@ -42,19 +40,17 @@ const Header = () => {
     };
   }, [isOpen]);
 
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', isDark);
-  }, [isDark]);
-
   return (
     <>
       {/* Main Header */}
-      <header className="sticky top-0 z-30 bg-darkBg/90 backdrop-blur-md border-b border-borderSecondary px-4 md:px-10 py-3 flex items-center justify-between">
+      <header className="sticky top-0 z-30 bg-[var(--card-bg)]/90 backdrop-blur-md border-b border-[var(--border-color)] px-4 md:px-10 py-3 flex items-center justify-between shadow-sm">
         {/* Logo Section */}
-        <div className="flex items-center gap-4">
+        <NavLink to="/" className="flex items-center gap-4">
           <img src={logo} alt="Mowet Kenya Logo" className="h-10 w-auto" />
-          <h2 className="text-white text-lg font-bold tracking-tight">MOWET Kenya</h2>
-        </div>
+          <h2 className="text-[var(--text-primary)] text-lg font-bold tracking-tight">
+            MOWET Kenya
+          </h2>
+        </NavLink>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-10">
@@ -64,7 +60,9 @@ const Header = () => {
               to={path}
               className={({ isActive }) =>
                 `text-sm font-medium transition-colors ${
-                  isActive ? 'text-primary' : 'text-white hover:text-primary'
+                  isActive
+                    ? 'text-[var(--primary)]'
+                    : 'text-[var(--text-primary)] hover:text-[var(--primary)]'
                 }`
               }
             >
@@ -74,17 +72,11 @@ const Header = () => {
           <button className="btn-primary">
             <span className="truncate">Book Appointment</span>
           </button>
-          <button onClick={toggleTheme} className="text-white hover:text-primary transition-colors">
-            {isDark ? <FiSun size={20} /> : <FiMoon size={20} />}
-          </button>
         </nav>
 
-        {/* Mobile Buttons */}
+        {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center gap-4 z-40 relative">
-          <button onClick={toggleTheme} className="text-white">
-            {isDark ? <FiSun size={20} /> : <FiMoon size={20} />}
-          </button>
-          <button onClick={toggleMenu} className="text-white">
+          <button onClick={toggleMenu} className="text-[var(--text-primary)]">
             {isOpen ? <FiX size={28} /> : <FiMenu size={28} />}
           </button>
         </div>
@@ -102,29 +94,14 @@ const Header = () => {
             style={{
               background: `
                 linear-gradient(135deg, 
-                  rgba(255, 255, 255, 0.1) 0%, 
-                  rgba(255, 255, 255, 0.05) 50%, 
-                  rgba(255, 255, 255, 0.1) 100%
-                ),
-                rgba(0, 0, 0, 0.4)
-              `,
+                  rgba(255, 255, 255, 0.9) 0%, 
+                  rgba(255, 255, 255, 0.85) 50%, 
+                  rgba(255, 255, 255, 0.9) 100%
+                )`,
               backdropFilter: 'blur(20px) saturate(180%)',
               WebkitBackdropFilter: 'blur(20px) saturate(180%)',
             }}
           >
-            {/* Frost overlay pattern */}
-            <div 
-              className="absolute inset-0"
-              style={{
-                background: `
-                  radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
-                  radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.06) 0%, transparent 40%)
-                `,
-              }}
-            />
-            
-            {/* Navigation Content */}
             <div className="relative z-10 flex flex-col items-center justify-center h-full px-6">
               <div className="flex flex-col items-center gap-8 text-center max-w-sm w-full">
                 {navItems.map(({ name, path }) => (
@@ -132,14 +109,14 @@ const Header = () => {
                     <NavLink
                       to={path}
                       onClick={() => setIsOpen(false)}
-                      className="block text-2xl font-medium text-white hover:text-primary transition-colors py-2 px-4 rounded-lg hover:bg-white/10 backdrop-blur-sm"
+                      className="block text-2xl font-medium text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors py-2 px-4 rounded-lg hover:bg-[var(--light-bg)]"
                     >
                       {name}
                     </NavLink>
                   </motion.div>
                 ))}
                 <motion.div variants={itemVariants} className="mt-6 w-full">
-                  <button 
+                  <button
                     className="btn-primary w-full py-4 text-lg font-semibold"
                     onClick={() => setIsOpen(false)}
                   >
