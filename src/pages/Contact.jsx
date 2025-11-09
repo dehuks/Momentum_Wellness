@@ -61,7 +61,20 @@ const Contact = () => {
             <FiPhone className="text-[var(--primary)] text-2xl" />
             <div>
               <h3 className="font-semibold text-[var(--text-primary)]">Phone</h3>
-              <p className="text-[var(--text-secondary)]">+254 700 123 456</p>
+              <div className="flex flex-col text-[var(--text-secondary)]">
+                <a
+                  href="tel:+254707727913"
+                  className="hover:text-[var(--text-primary)] transition-colors"
+                >
+                  0707 727 913
+                </a>
+                <a
+                  href="tel:+254720200220"
+                  className="hover:text-[var(--text-primary)] transition-colors"
+                >
+                  0720 200 220
+                </a>
+              </div>
             </div>
           </div>
           <div className="card flex items-start gap-4">
@@ -149,12 +162,12 @@ const Contact = () => {
         </div>
       </div>
 
-      {/* Google Maps Embed */}
+      {/* Google Maps Embed with marker */}
       <div className="mt-16 max-w-5xl mx-auto">
         <div className="card overflow-hidden p-0">
           <iframe
             title="Mowet Kenya Location"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.6798398330227!2d36.821946!3d-1.292066!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10d4489f5c39%3A0x2bb1bbecfbb5b5c1!2sNairobi!5e0!3m2!1sen!2ske!4v1709980000000"
+            src="https://www.google.com/maps?q=-1.411611,36.690167(Mowet)&hl=en&z=15&output=embed"
             width="100%"
             height="400"
             style={{ border: 0 }}
