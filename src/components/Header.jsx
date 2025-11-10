@@ -4,12 +4,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiMenu, FiX } from 'react-icons/fi';
 import logo from '../assets/mowet_logo.png';
 
+
 const navItems = [
   { name: 'Home', path: '/' },
   { name: 'About Us', path: '/about' },
   { name: 'Services', path: '/services' },
+  { name: 'Blog', path: '/blog' },   // ⬅️ Added Blog
   { name: 'Contact', path: '/contact' },
 ];
+
 
 const containerVariants = {
   hidden: { opacity: 0, y: -20 },
