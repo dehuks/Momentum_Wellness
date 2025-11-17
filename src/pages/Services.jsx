@@ -14,7 +14,7 @@ import serviceImage from '../assets/services.png';
 const Services = () => {
   const services = [
     { 
-      icon: <FiHome className="w-8 h-8 text-[var(--primary)]" />, 
+      icon: <FiHome className="w-8 h-8 text-[var(--primary)]" />,    
       title: "Inpatient Rehabilitation", 
       description: "Comprehensive residential treatment for severe mental health conditions in a supportive environment.",
       details: "Our inpatient program provides 24/7 care with a multidisciplinary team including psychiatrists, psychologists, nurses, and therapists. Patients receive personalized treatment plans, medication management, group therapy, and life skills training."
