@@ -1,19 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiHome, FiUsers, FiHeart, FiBriefcase } from 'react-icons/fi';
 import { Link } from "react-router-dom";
-
-// ...
-
-<Link to="/cage-test">
-  <button 
-    className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-white text-gray-900 rounded-lg shadow-xl hover:bg-gray-100 transition-all duration-300 border-2 border-white"
-    style={{ textShadow: 'none' }}
-  >
-    Get Started (CAGE Test)
-  </button>
-</Link>
-
+import { WhatsAppButton, WhatsAppFloat } from './WhatsAppIntegration'; // Import WhatsApp components
 
 // Enhanced Image Carousel Component with overlay text
 const ImageCarousel = () => {
@@ -60,10 +49,8 @@ const ImageCarousel = () => {
               alt={image.alt}
               className="w-full h-full object-cover"
             />
-            {/* Gradient overlay for better text visibility */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
             
-            {/* Overlay text */}
             <div className="absolute bottom-8 left-8 text-white">
               <motion.h3 
                 key={`title-${index}-${currentImage}`}
@@ -88,7 +75,6 @@ const ImageCarousel = () => {
         ))}
       </div>
 
-      {/* Navigation dots */}
       <div className="absolute bottom-4 right-4 flex space-x-2">
         {images.map((_, index) => (
           <button
@@ -101,7 +87,6 @@ const ImageCarousel = () => {
         ))}
       </div>
 
-      {/* Progress bar */}
       <div className="absolute bottom-0 left-0 w-full h-1 bg-black/20">
         <div 
           className="h-full bg-white transition-all duration-5000 ease-linear"
@@ -115,15 +100,13 @@ const ImageCarousel = () => {
   );
 };
 
-// Enhanced Hero Component
+// Enhanced Hero Component with WhatsApp Integration
 const Hero = () => (
   <div className="hero-section">
     <div className="hero-content">
-      {/* Background decoration */}
       <div className="hero-decoration" />
       
       <div className="flex flex-col items-center gap-12 max-w-7xl mx-auto relative z-10">
-        {/* Main content */}
         <div className="text-center max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -152,19 +135,22 @@ const Hero = () => (
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <button className="btn-primary btn-large">
+            {/* WhatsApp Button for Hero CTA */}
+            <WhatsAppButton 
+              className="btn-large"
+              message="Hello! I'm interested in starting my wellness journey with MOWET Kenya. Can you help me book an appointment?"
+            >
               <span>Start Your Journey</span>
               <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
-            </button>
+            </WhatsAppButton>
             <button className="btn-secondary btn-large">
               Explore Services
             </button>
           </motion.div>
         </div>
 
-        {/* Enhanced carousel section */}
         <motion.div 
           className="w-full max-w-2xl"
           initial={{ opacity: 0, scale: 0.9 }}
@@ -174,7 +160,6 @@ const Hero = () => (
           <ImageCarousel />
         </motion.div>
 
-        {/* Trust indicators */}
         <motion.div 
           className="flex flex-wrap justify-center items-center gap-8 text-sm text-gray-500 mt-8"
           initial={{ opacity: 0 }}
@@ -199,12 +184,10 @@ const Hero = () => (
   </div>
 );
 
-// Section Title Component
 const SectionTitle = ({ children }) => (
   <h2 className="section-title">{children}</h2>
 );
 
-// Service Card Component
 const ServiceCard = ({ icon, title, description }) => (
   <div className="service-card">
     <div className="service-icon">
@@ -267,450 +250,446 @@ const Home = () => {
   ];
 
   return (
-    <main className="px-4 md:px-10 lg:px-20 py-8 flex justify-center" style={{ backgroundColor: 'var(--light-bg)' }}>
-      <div className="layout-content-container flex flex-col max-w-6xl w-full">
-        <Hero />
+    <>
+      {/* Floating WhatsApp Button */}
+      <WhatsAppFloat />
+      
+      <main className="px-4 md:px-10 lg:px-20 py-8 flex justify-center" style={{ backgroundColor: 'var(--light-bg)' }}>
+        <div className="layout-content-container flex flex-col max-w-6xl w-full">
+          <Hero />
 
-        <SectionTitle>Our Services</SectionTitle>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((service, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-            >
-              <ServiceCard
-                icon={service.icon}
-                title={service.title}
-                description={service.description}
-              />
-            </motion.div>
-          ))}
-        </div>
-
-        <SectionTitle>What Our Clients Say</SectionTitle>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-10">
-          {testimonials.map((t, index) => (
-            <motion.div
-              key={index}
-              className="testimonial-card"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="testimonial-avatar">{t.initials}</div>
-                <div>
-                  <h3 className="testimonial-author">{t.name}</h3>
-                  <p className="testimonial-location">{t.location}</p>
-                </div>
-              </div>
-              <p className="testimonial-content">"{t.content}"</p>
-              <div className="flex text-yellow-500 mt-3" aria-label="5 star rating">
-                {[...Array(5)].map((_, i) => (
-                  <svg
-                    key={i}
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        <motion.div
-          className="mt-16 p-8 rounded-xl"
-          style={{ background: 'var(--gradient-primary)' }}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="text-center text-white">
-            <h2 className="text-3xl font-bold mb-4">
-              Ready to Start Your Wellness Journey?
-            </h2>
-            <p className="text-white/90 mb-6 max-w-2xl mx-auto">
-              Take the first step toward better mental health. Our professionals are here to support you every step of the way.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link to="/cage">
-  <button 
-    className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-white text-gray-900 rounded-lg shadow-xl hover:bg-gray-100 transition-all duration-300 border-2 border-white"
-    style={{ textShadow: 'none' }}
-  >
-    Get Started (CAGE Test)
-  </button>
-</Link>
-              <button 
-                className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white rounded-lg border-2 border-white hover:bg-white hover:text-gray-900 transition-all duration-300"
-                style={{ textShadow: 'none' }}
+          <SectionTitle>Our Services</SectionTitle>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {services.map((service, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
               >
-                Learn More
-              </button>
-            </div>
+                <ServiceCard
+                  icon={service.icon}
+                  title={service.title}
+                  description={service.description}
+                />
+              </motion.div>
+            ))}
           </div>
-        </motion.div>
-      </div>
 
-      <style jsx>{`
-        /* Custom CSS Variables */
-        :root {
-          --primary: rgb(121, 159, 206);
-          --primary-hover: #3B82F6;
-          --accent:rgb(255, 208, 206);
-          --accent-hover: rgb(94, 59, 173);
-           
-          --light-bg: rgb(255, 255, 255);
-          --card-bg:rgb(255, 254, 254);
-          --border-color: #E5E7EB;
-          --border-secondary: #D1D5DB;
-         
-          --text-primary: #1F2937;
-          --text-secondary: #6B7280;
-         
-          --gradient-primary: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
-          --gradient-accent: linear-gradient(135deg, #DBEAFE 0%, #93C5FD 100%);
-          --gradient-hero: linear-gradient(135deg, #F8FAFC 0%, #EBF4FF 50%, #F8FAFC 100%);
-         
-          --shadow-primary: 0 4px 15px rgba(96, 165, 250, 0.2);
-          --shadow-accent: 0 4px 15px rgba(167, 139, 250, 0.2);
-          --shadow-hover: 0 20px 40px rgba(96, 165, 250, 0.15);
-          --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
+          <SectionTitle>What Our Clients Say</SectionTitle>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-10">
+            {testimonials.map((t, index) => (
+              <motion.div
+                key={index}
+                className="testimonial-card"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="testimonial-avatar">{t.initials}</div>
+                  <div>
+                    <h3 className="testimonial-author">{t.name}</h3>
+                    <p className="testimonial-location">{t.location}</p>
+                  </div>
+                </div>
+                <p className="testimonial-content">"{t.content}"</p>
+                <div className="flex text-yellow-500 mt-3" aria-label="5 star rating">
+                  {[...Array(5)].map((_, i) => (
+                    <svg
+                      key={i}
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </div>
 
-        /* Enhanced Button Components */
-        .btn-primary {
-          display: inline-flex;
-          height: 2.5rem;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          border-radius: 1rem;
-          background: var(--gradient-primary);
-          padding-left: 1.5rem;
-          padding-right: 1.5rem;
-          font-size: 0.875rem;
-          font-weight: 700;
-          line-height: 1.25rem;
-          letter-spacing: 0.015em;
-          color: white;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          cursor: pointer;
-          border: none;
-          box-shadow: var(--shadow-primary);
-          position: relative;
-          overflow: hidden;
-        }
+          <motion.div
+            className="mt-16 p-8 rounded-xl"
+            style={{ background: 'var(--gradient-primary)' }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="text-center text-white">
+              <h2 className="text-3xl font-bold mb-4">
+                Ready to Start Your Wellness Journey?
+              </h2>
+              <p className="text-white/90 mb-6 max-w-2xl mx-auto">
+                Take the first step toward better mental health. Our professionals are here to support you every step of the way.
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <Link to="/cage">
+                  <button 
+                    className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-white text-gray-900 rounded-lg shadow-xl hover:bg-gray-100 transition-all duration-300 border-2 border-white"
+                    style={{ textShadow: 'none' }}
+                  >
+                    Get Started (CAGE Test)
+                  </button>
+                </Link>
+                {/* WhatsApp Button in CTA Section */}
+                <WhatsAppButton
+                  variant="secondary"
+                  className="px-8 py-4 text-lg font-bold text-white rounded-lg border-2 border-white hover:bg-white hover:text-gray-900"
+                  message="Hi! I saw your wellness journey section. I'd like to learn more about your services and book an appointment."
+                >
+                  Book Appointment
+                </WhatsAppButton>
+              </div>
+            </div>
+          </motion.div>
+        </div>
 
-        .btn-primary::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-          transition: left 0.5s ease;
-        }
+        <style jsx>{`
+          /* All your existing styles remain the same */
+          :root {
+            --primary: rgb(121, 159, 206);
+            --primary-hover: #3B82F6;
+            --accent:rgb(255, 208, 206);
+            --accent-hover: rgb(94, 59, 173);
+            --light-bg: rgb(255, 255, 255);
+            --card-bg:rgb(255, 254, 254);
+            --border-color: #E5E7EB;
+            --border-secondary: #D1D5DB;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --gradient-primary: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
+            --gradient-accent: linear-gradient(135deg, #DBEAFE 0%, #93C5FD 100%);
+            --gradient-hero: linear-gradient(135deg, #F8FAFC 0%, #EBF4FF 50%, #F8FAFC 100%);
+            --shadow-primary: 0 4px 15px rgba(96, 165, 250, 0.2);
+            --shadow-accent: 0 4px 15px rgba(167, 139, 250, 0.2);
+            --shadow-hover: 0 20px 40px rgba(96, 165, 250, 0.15);
+            --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.1);
+          }
 
-        .btn-primary:hover::before {
-          left: 100%;
-        }
+          .btn-primary {
+            display: inline-flex;
+            height: 2.5rem;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border-radius: 1rem;
+            background: var(--gradient-primary);
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            line-height: 1.25rem;
+            letter-spacing: 0.015em;
+            color: white;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: none;
+            box-shadow: var(--shadow-primary);
+            position: relative;
+            overflow: hidden;
+          }
 
-        .btn-primary:hover {
-          transform: translateY(-3px);
-          box-shadow: var(--shadow-hover);
-        }
+          .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+          }
 
-        .btn-large {
-          height: 3.5rem;
-          padding-left: 2rem;
-          padding-right: 2rem;
-          font-size: 1.125rem;
-          border-radius: 1.25rem;
-        }
+          .btn-primary:hover::before {
+            left: 100%;
+          }
 
-        .btn-secondary {
-          display: inline-flex;
-          height: 2.5rem;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          border-radius: 1rem;
-          background: rgba(255, 255, 255, 0.8);
-          backdrop-filter: blur(10px);
-          border: 2px solid var(--primary);
-          padding-left: 1.5rem;
-          padding-right: 1.5rem;
-          font-size: 0.875rem;
-          font-weight: 700;
-          line-height: 1.25rem;
-          letter-spacing: 0.015em;
-          color: var(--primary);
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          cursor: pointer;
-        }
+          .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+          }
 
-        .btn-secondary:hover {
-          background: var(--primary);
-          color: white;
-          box-shadow: var(--shadow-primary);
-          transform: translateY(-2px);
-        }
+          .btn-large {
+            height: 3.5rem;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            font-size: 1.125rem;
+            border-radius: 1.25rem;
+          }
 
-        /* Enhanced Hero Section */
-        .hero-section {
-          position: relative;
-          min-height: 90vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 2rem 1rem;
-          background: var(--gradient-hero);
-          overflow: hidden;
-        }
+          .btn-secondary {
+            display: inline-flex;
+            height: 2.5rem;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--primary);
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            line-height: 1.25rem;
+            letter-spacing: 0.015em;
+            color: var(--primary);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+          }
 
-        .hero-decoration {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: 
-            radial-gradient(ellipse at top left, rgba(96, 165, 250, 0.1) 0%, transparent 50%),
-            radial-gradient(ellipse at bottom right, rgba(167, 139, 250, 0.1) 0%, transparent 50%),
-            radial-gradient(ellipse at center, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
-          pointer-events: none;
-        }
+          .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-primary);
+            transform: translateY(-2px);
+          }
 
-        .hero-content {
-          position: relative;
-          z-index: 10;
-          width: 100%;
-        }
+          .hero-section {
+            position: relative;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            background: var(--gradient-hero);
+            overflow: hidden;
+          }
 
-        .hero-title {
-          font-size: 3rem;
-          font-weight: 900;
-          line-height: 1.1;
-          letter-spacing: -0.02em;
-          color: var(--text-primary);
-        }
+          .hero-decoration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+              radial-gradient(ellipse at top left, rgba(96, 165, 250, 0.1) 0%, transparent 50%),
+              radial-gradient(ellipse at bottom right, rgba(167, 139, 250, 0.1) 0%, transparent 50%),
+              radial-gradient(ellipse at center, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+          }
 
-        .hero-title-accent {
-          background: var(--gradient-primary);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
+          .hero-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+          }
 
-        .hero-subtitle {
-          font-size: 1.25rem;
-          font-weight: 400;
-          line-height: 1.7;
-          color: var(--text-secondary);
-          max-width: 48rem;
-          margin: 0 auto;
-        }
-
-        /* Section Titles */
-        .section-title {
-          font-size: 2.25rem;
-          font-weight: 900;
-          line-height: 1.1;
-          letter-spacing: -0.033em;
-          color: var(--text-primary);
-          text-align: center;
-          margin-bottom: 2rem;
-          margin-top: 4rem;
-          position: relative;
-        }
-
-        .section-title::after {
-          content: '';
-          display: block;
-          width: 60px;
-          height: 4px;
-          background: var(--gradient-primary);
-          margin: 1rem auto;
-          border-radius: 2px;
-        }
-
-        /* Enhanced Service Cards */
-        .service-card {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 1rem;
-          border-radius: 1.5rem;
-          padding: 2rem 1.5rem;
-          text-align: center;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          background: var(--card-bg);
-          border: 1px solid var(--border-color);
-          box-shadow: var(--shadow-light);
-          position: relative;
-          overflow: hidden;
-        }
-
-        .service-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 4px;
-          background: var(--gradient-primary);
-          transform: scaleX(0);
-          transition: transform 0.3s ease;
-        }
-
-        .service-card:hover::before {
-          transform: scaleX(1);
-        }
-
-        .service-card:hover {
-          transform: translateY(-8px);
-          box-shadow: var(--shadow-hover);
-          border-color: var(--primary);
-        }
-
-        .service-icon {
-          display: flex;
-          height: 4rem;
-          width: 4rem;
-          align-items: center;
-          justify-content: center;
-          border-radius: 1rem;
-          background: var(--gradient-primary);
-          color: white;
-          box-shadow: var(--shadow-primary);
-          transition: transform 0.3s ease;
-        }
-
-        .service-card:hover .service-icon {
-          transform: scale(1.1);
-        }
-
-        .service-title {
-          font-size: 1.25rem;
-          font-weight: 700;
-          line-height: 1.2;
-          color: var(--text-primary);
-        }
-
-        .service-description {
-          font-size: 0.875rem;
-          font-weight: 400;
-          line-height: 1.5;
-          color: var(--text-secondary);
-        }
-
-        /* Enhanced Testimonial Components */
-        .testimonial-card {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-          border-radius: 1.5rem;
-          padding: 2rem;
-          background-color: var(--card-bg);
-          border: 1px solid var(--border-color);
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          box-shadow: var(--shadow-light);
-          position: relative;
-        }
-
-        .testimonial-card::before {
-          content: '"';
-          position: absolute;
-          top: -0.5rem;
-          left: 1.5rem;
-          font-size: 4rem;
-          color: var(--primary);
-          opacity: 0.3;
-          line-height: 1;
-        }
-
-        .testimonial-card:hover {
-          transform: translateY(-5px);
-          box-shadow: var(--shadow-hover);
-        }
-
-        .testimonial-avatar {
-          height: 3rem;
-          width: 3rem;
-          border-radius: 50%;
-          background: var(--gradient-primary);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-weight: 700;
-        }
-
-        .testimonial-content {
-          flex: 1;
-          color: var(--text-secondary);
-          font-style: italic;
-          line-height: 1.6;
-        }
-
-        .testimonial-author {
-          color: var(--text-primary);
-          font-weight: 600;
-        }
-
-        .testimonial-location {
-          color: var(--text-secondary);
-          font-size: 0.875rem;
-        }
-
-        /* Progress bar animation */
-        @keyframes progress-0 {
-          0% { width: 0%; }
-          100% { width: 33.33%; }
-        }
-        @keyframes progress-1 {
-          0% { width: 33.33%; }
-          100% { width: 66.66%; }
-        }
-        @keyframes progress-2 {
-          0% { width: 66.66%; }
-          100% { width: 100%; }
-        }
-
-        /* Responsive Design */
-        @media (min-width: 768px) {
           .hero-title {
-            font-size: 4rem;
-          }
-          .hero-subtitle {
-            font-size: 1.375rem;
-          }
-          .section-title {
-            font-size: 2.5rem;
-          }
-        }
-
-        @media (min-width: 1024px) {
-          .hero-title {
-            font-size: 5rem;
-          }
-          .section-title {
             font-size: 3rem;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
           }
-        }
-      `}</style>
-    </main>
+
+          .hero-title-accent {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          }
+
+          .hero-subtitle {
+            font-size: 1.25rem;
+            font-weight: 400;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            max-width: 48rem;
+            margin: 0 auto;
+          }
+
+          .section-title {
+            font-size: 2.25rem;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -0.033em;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 2rem;
+            margin-top: 4rem;
+            position: relative;
+          }
+
+          .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--gradient-primary);
+            margin: 1rem auto;
+            border-radius: 2px;
+          }
+
+          .service-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            border-radius: 1.5rem;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-light);
+            position: relative;
+            overflow: hidden;
+          }
+
+          .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+          }
+
+          .service-card:hover::before {
+            transform: scaleX(1);
+          }
+
+          .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+          }
+
+          .service-icon {
+            display: flex;
+            height: 4rem;
+            width: 4rem;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1rem;
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-primary);
+            transition: transform 0.3s ease;
+          }
+
+          .service-card:hover .service-icon {
+            transform: scale(1.1);
+          }
+
+          .service-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--text-primary);
+          }
+
+          .service-description {
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: var(--text-secondary);
+          }
+
+          .testimonial-card {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-light);
+            position: relative;
+          }
+
+          .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: -0.5rem;
+            left: 1.5rem;
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.3;
+            line-height: 1;
+          }
+
+          .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+          }
+
+          .testimonial-avatar {
+            height: 3rem;
+            width: 3rem;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+          }
+
+          .testimonial-content {
+            flex: 1;
+            color: var(--text-secondary);
+            font-style: italic;
+            line-height: 1.6;
+          }
+
+          .testimonial-author {
+            color: var(--text-primary);
+            font-weight: 600;
+          }
+
+          .testimonial-location {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+          }
+
+          @keyframes progress-0 {
+            0% { width: 0%; }
+            100% { width: 33.33%; }
+          }
+          @keyframes progress-1 {
+            0% { width: 33.33%; }
+            100% { width: 66.66%; }
+          }
+          @keyframes progress-2 {
+            0% { width: 66.66%; }
+            100% { width: 100%; }
+          }
+
+          @media (min-width: 768px) {
+            .hero-title {
+              font-size: 4rem;
+            }
+            .hero-subtitle {
+              font-size: 1.375rem;
+            }
+            .section-title {
+              font-size: 2.5rem;
+            }
+          }
+
+          @media (min-width: 1024px) {
+            .hero-title {
+              font-size: 5rem;
+            }
+            .section-title {
+              font-size: 3rem;
+            }
+          }
+        `}</style>
+      </main>
+    </>
   );
 };
 
