@@ -3,15 +3,17 @@ import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMenu, FiX } from 'react-icons/fi';
 import logo from '../assets/mowet_logo.png';
+import AppointmentModal from '../AppointmentModal'; 
 
 
 const navItems = [
   { name: 'Home', path: '/' },
   { name: 'About Us', path: '/about' },
   { name: 'Services', path: '/services' },
-  { name: 'Blog', path: '/blog' },   // ⬅️ Added Blog
+  { name: 'Blog', path: 'https://mowet.co.ke/blog', external: true },
   { name: 'Contact', path: '/contact' },
 ];
+
 
 
 const containerVariants = {
@@ -32,19 +34,37 @@ const itemVariants = {
 };
 
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // ➡️ New state for the Booking Modal
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  
+  // ➡️ Helper function to open the booking modal and close the mobile menu
+  const handleBookAppointmentClick = () => {
+    setIsBookingModalOpen(true);
+    // Ensure mobile menu closes if user clicks the button inside the menu
+    if (isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+    }
+  }
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : 'auto';
+    // Control body scroll based on *either* modal or mobile menu being open
+    document.body.style.overflow = (isMobileMenuOpen || isBookingModalOpen) ? 'hidden' : 'auto';
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [isOpen]);
+  }, [isMobileMenuOpen, isBookingModalOpen]);
 
   return (
     <>
+      {/* ➡️ 1. Appointment Modal Integration */}
+      <AppointmentModal 
+        isOpen={isBookingModalOpen} 
+        onClose={() => setIsBookingModalOpen(false)} 
+      />
+
       {/* Main Header */}
       <header className="sticky top-0 z-30 bg-[var(--card-bg)]/90 backdrop-blur-md border-b border-[var(--border-color)] px-4 md:px-10 py-3 flex items-center justify-between shadow-sm">
         {/* Logo Section */}
@@ -72,7 +92,11 @@ const Header = () => {
               {name}
             </NavLink>
           ))}
-          <button className="btn-primary">
+          {/* ➡️ Desktop Button opens the Modal */}
+          <button 
+            className="btn-primary"
+            onClick={handleBookAppointmentClick}
+          >
             <span className="truncate">Book Appointment</span>
           </button>
         </nav>
@@ -80,14 +104,14 @@ const Header = () => {
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center gap-4 z-40 relative">
           <button onClick={toggleMenu} className="text-[var(--text-primary)]">
-            {isOpen ? <FiX size={28} /> : <FiMenu size={28} />}
+            {isMobileMenuOpen ? <FiX size={28} /> : <FiMenu size={28} />}
           </button>
         </div>
       </header>
 
       {/* Mobile Navigation Overlay */}
       <AnimatePresence>
-        {isOpen && (
+        {isMobileMenuOpen && (
           <motion.div
             initial="hidden"
             animate="visible"
@@ -111,7 +135,7 @@ const Header = () => {
                   <motion.div key={name} variants={itemVariants} className="w-full">
                     <NavLink
                       to={path}
-                      onClick={() => setIsOpen(false)}
+                      onClick={() => setIsMobileMenuOpen(false)}
                       className="block text-2xl font-medium text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors py-2 px-4 rounded-lg hover:bg-[var(--light-bg)]"
                     >
                       {name}
@@ -119,9 +143,10 @@ const Header = () => {
                   </motion.div>
                 ))}
                 <motion.div variants={itemVariants} className="mt-6 w-full">
+                  {/* ➡️ Mobile Button opens the Modal */}
                   <button
                     className="btn-primary w-full py-4 text-lg font-semibold"
-                    onClick={() => setIsOpen(false)}
+                    onClick={handleBookAppointmentClick} // Use the new handler
                   >
                     <span className="truncate">Book Appointment</span>
                   </button>

@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 // --- Configuration ---
 const WHATSAPP_CONFIG = {
   // Replace with your actual WhatsApp Business number (Kenyan format: 254XXXXXXXXX)
-  phoneNumber: '254780027580', // CHANGE THIS TO YOUR NUMBER
+  phoneNumber: '254720200220', // CHANGE THIS TO YOUR NUMBER
   defaultMessage: 'Hello MOWET Kenya! I would like to book an appointment for mental wellness services.',
 };
 

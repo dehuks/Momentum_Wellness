@@ -1,8 +1,80 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiHome, FiUsers, FiHeart, FiBriefcase } from 'react-icons/fi';
+import { FiHome, FiUsers, FiHeart, FiBriefcase, FiAlertTriangle, FiX } from 'react-icons/fi';
 import { Link } from "react-router-dom";
-import { WhatsAppButton, WhatsAppFloat } from './WhatsAppIntegration'; // Import WhatsApp components
+import { WhatsAppButton, WhatsAppFloat } from './WhatsappConfig'; // Import WhatsApp components
+
+
+const CageConsentModal = ({ isOpen, onClose }) => {
+const ModalBackdrop = { visible: { opacity: 1 }, hidden: { opacity: 0 } };
+const ModalContent = {
+hidden: { y: '-100vh', opacity: 0 },
+visible: { y: '0', opacity: 1, transition: { delay: 0.1, type: 'spring', stiffness: 100 } },
+};
+
+
+return (
+<motion.div
+className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+variants={ModalBackdrop}
+initial="hidden"
+animate={isOpen ? 'visible' : 'hidden'}
+exit="hidden"
+onClick={onClose}
+>
+<motion.div
+className="w-full max-w-lg p-8 bg-white rounded-xl shadow-2xl relative"
+variants={ModalContent}
+onClick={(e) => e.stopPropagation()}
+>
+<button
+onClick={onClose}
+className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition-colors"
+>
+<FiX size={24} />
+</button>
+
+
+<div className="flex flex-col items-center text-center">
+<FiAlertTriangle className="text-4xl text-red-500 mb-4" />
+<h3 className="text-2xl font-bold mb-3 text-[var(--text-primary)]">
+Consent to Take CAGE Quiz
+</h3>
+<p className="text-[var(--text-secondary)] mb-6">
+The CAGE questionnaire is a <span className="uppercase font-bold">four-question screening tool</span> for identifying potential alcohol abuse.
+It is <span className="uppercase font-bold">not a diagnostic tool</span> and should not replace professional medical advice.
+</p>
+
+
+<div className="text-left bg-gray-50 p-4 rounded-lg border mb-6">
+<p className="font-semibold text-sm mb-2 text-gray-700">By proceeding, you agree to the following:</p>
+<ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+<li>You are voluntarily taking this self-assessment.</li>
+<li>This quiz is for <span className="uppercase font-bold">informational purposes only</span>.</li>
+<li>Your results will be treated with <span className="uppercase font-bold">confidentiality</span>.</li>
+<li>You understand that a professional consultation is required for any diagnosis.</li>
+</ul>
+</div>
+
+
+<div className="flex gap-4 w-full">
+<button onClick={onClose} className="btn-secondary flex-1 py-3 text-base">
+Cancel
+</button>
+<Link
+to="/cage"
+onClick={onClose}
+className="btn-primary flex-1 py-3 text-base flex items-center justify-center"
+>
+I Consent, Start Quiz
+</Link>
+</div>
+</div>
+</motion.div>
+</motion.div>
+);
+};
+
 
 // Enhanced Image Carousel Component with overlay text
 const ImageCarousel = () => {
@@ -87,6 +159,7 @@ const ImageCarousel = () => {
         ))}
       </div>
 
+      {/* Progress Bar (style remains the same for simplicity) */}
       <div className="absolute bottom-0 left-0 w-full h-1 bg-black/20">
         <div 
           className="h-full bg-white transition-all duration-5000 ease-linear"
@@ -135,7 +208,7 @@ const Hero = () => (
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            {/* WhatsApp Button for Hero CTA */}
+            {/* ➡️ DIRECT WhatsApp Button for Hero CTA (NO MODAL) */}
             <WhatsAppButton 
               className="btn-large"
               message="Hello! I'm interested in starting my wellness journey with MOWET Kenya. Can you help me book an appointment?"
@@ -202,7 +275,11 @@ const ServiceCard = ({ icon, title, description }) => (
 );
 
 const Home = () => {
+  // ➡️ New state for the CAGE Consent Modal
+  const [isCageModalOpen, setIsCageModalOpen] = useState(false);
+  
   const services = [
+    // ... (services data)
     {
       icon: <FiHome />,
       title: 'Inpatient Rehabilitation',
@@ -226,6 +303,7 @@ const Home = () => {
   ];
 
   const testimonials = [
+    // ... (testimonials data)
     {
       name: 'Sarah M.',
       location: 'Nairobi, Kenya',
@@ -254,11 +332,20 @@ const Home = () => {
       {/* Floating WhatsApp Button */}
       <WhatsAppFloat />
       
+      {/* ➡️ 1. CAGE Consent Modal Integration */}
+      {isCageModalOpen && (
+        <CageConsentModal 
+          isOpen={isCageModalOpen} 
+          onClose={() => setIsCageModalOpen(false)} 
+        />
+      )}
+      
       <main className="px-4 md:px-10 lg:px-20 py-8 flex justify-center" style={{ backgroundColor: 'var(--light-bg)' }}>
         <div className="layout-content-container flex flex-col max-w-6xl w-full">
           <Hero />
 
           <SectionTitle>Our Services</SectionTitle>
+          {/* ... (Services grid) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service, index) => (
               <motion.div
@@ -278,6 +365,7 @@ const Home = () => {
           </div>
 
           <SectionTitle>What Our Clients Say</SectionTitle>
+          {/* ... (Testimonials grid) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-10">
             {testimonials.map((t, index) => (
               <motion.div
@@ -329,15 +417,16 @@ const Home = () => {
                 Take the first step toward better mental health. Our professionals are here to support you every step of the way.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link to="/cage">
-                  <button 
+                {/* ➡️ MODIFIED: Button now opens the CAGE Consent Modal */}
+                <button
+                    onClick={() => setIsCageModalOpen(true)}
                     className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-white text-gray-900 rounded-lg shadow-xl hover:bg-gray-100 transition-all duration-300 border-2 border-white"
                     style={{ textShadow: 'none' }}
-                  >
+                >
                     Get Started (CAGE Test)
-                  </button>
-                </Link>
-                {/* WhatsApp Button in CTA Section */}
+                </button>
+                
+                {/* ➡️ MODIFIED: WhatsApp Button is DIRECT (NO MODAL) */}
                 <WhatsAppButton
                   variant="secondary"
                   className="px-8 py-4 text-lg font-bold text-white rounded-lg border-2 border-white hover:bg-white hover:text-gray-900"
