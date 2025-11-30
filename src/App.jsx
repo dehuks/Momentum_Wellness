@@ -7,7 +7,7 @@ import About from './pages/About';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
 import CageQuestionnaire from './pages/CageQuestionnaire';
-import Blog from "./pages/Blogs";
+
 
 
 
@@ -26,7 +26,6 @@ const App = () => {
             <Route path="/services" element={<Services />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/cage" element={<CageQuestionnaire />} />
-            <Route path="/blog" element={<Blog />} />
             
           </Routes>
         </main>

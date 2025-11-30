@@ -2,84 +2,80 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiHome, FiUsers, FiHeart, FiBriefcase, FiAlertTriangle, FiX } from 'react-icons/fi';
 import { Link } from "react-router-dom";
-import { WhatsAppButton, WhatsAppFloat } from './WhatsappConfig'; // Import WhatsApp components
-
+import { WhatsAppFloat } from './WhatsappConfig'; // Removed WhatsAppButton import as it's replaced
+import AppointmentModal from '../AppointmentModal'; // Imported Modal
 
 const CageConsentModal = ({ isOpen, onClose }) => {
-const ModalBackdrop = { visible: { opacity: 1 }, hidden: { opacity: 0 } };
-const ModalContent = {
-hidden: { y: '-100vh', opacity: 0 },
-visible: { y: '0', opacity: 1, transition: { delay: 0.1, type: 'spring', stiffness: 100 } },
-};
+  const ModalBackdrop = { visible: { opacity: 1 }, hidden: { opacity: 0 } };
+  const ModalContent = {
+    hidden: { y: '-100vh', opacity: 0 },
+    visible: { y: '0', opacity: 1, transition: { delay: 0.1, type: 'spring', stiffness: 100 } },
+  };
 
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+      variants={ModalBackdrop}
+      initial="hidden"
+      animate={isOpen ? 'visible' : 'hidden'}
+      exit="hidden"
+      onClick={onClose}
+    >
+      <motion.div
+        className="w-full max-w-lg p-8 bg-white rounded-xl shadow-2xl relative"
+        variants={ModalContent}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition-colors"
+        >
+          <FiX size={24} />
+        </button>
 
-return (
-<motion.div
-className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
-variants={ModalBackdrop}
-initial="hidden"
-animate={isOpen ? 'visible' : 'hidden'}
-exit="hidden"
-onClick={onClose}
->
-<motion.div
-className="w-full max-w-lg p-8 bg-white rounded-xl shadow-2xl relative"
-variants={ModalContent}
-onClick={(e) => e.stopPropagation()}
->
-<button
-onClick={onClose}
-className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition-colors"
->
-<FiX size={24} />
-</button>
+        <div className="flex flex-col items-center text-center">
+          <FiAlertTriangle className="text-4xl text-red-500 mb-4" />
+          <h3 className="text-2xl font-bold mb-3 text-[var(--text-primary)]">
+            Consent to Take CAGE Quiz
+          </h3>
+          <p className="text-[var(--text-secondary)] mb-6">
+            The CAGE questionnaire is a <span className="uppercase font-bold">four-question screening tool</span> for identifying potential alcohol abuse.
+            It is <span className="uppercase font-bold">not a diagnostic tool</span> and should not replace professional medical advice.
+          </p>
 
+          <div className="text-left bg-gray-50 p-4 rounded-lg border mb-6">
+            <p className="font-semibold text-sm mb-2 text-gray-700">By proceeding, you agree to the following:</p>
+            <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+              <li>You are voluntarily taking this self-assessment.</li>
+              <li>This quiz is for <span className="uppercase font-bold">informational purposes only</span>.</li>
+              <li>Your results will be treated with <span className="uppercase font-bold">confidentiality</span>.</li>
+              <li>You understand that a professional consultation is required for any diagnosis.</li>
+            </ul>
+          </div>
 
-<div className="flex flex-col items-center text-center">
-<FiAlertTriangle className="text-4xl text-red-500 mb-4" />
-<h3 className="text-2xl font-bold mb-3 text-[var(--text-primary)]">
-Consent to Take CAGE Quiz
-</h3>
-<p className="text-[var(--text-secondary)] mb-6">
-The CAGE questionnaire is a <span className="uppercase font-bold">four-question screening tool</span> for identifying potential alcohol abuse.
-It is <span className="uppercase font-bold">not a diagnostic tool</span> and should not replace professional medical advice.
-</p>
-
-
-<div className="text-left bg-gray-50 p-4 rounded-lg border mb-6">
-<p className="font-semibold text-sm mb-2 text-gray-700">By proceeding, you agree to the following:</p>
-<ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
-<li>You are voluntarily taking this self-assessment.</li>
-<li>This quiz is for <span className="uppercase font-bold">informational purposes only</span>.</li>
-<li>Your results will be treated with <span className="uppercase font-bold">confidentiality</span>.</li>
-<li>You understand that a professional consultation is required for any diagnosis.</li>
-</ul>
-</div>
-
-
-<div className="flex gap-4 w-full">
-<button onClick={onClose} className="btn-secondary flex-1 py-3 text-base">
-Cancel
-</button>
-<Link
-to="/cage"
-onClick={onClose}
-className="btn-primary flex-1 py-3 text-base flex items-center justify-center"
->
-I Consent, Start Quiz
-</Link>
-</div>
-</div>
-</motion.div>
-</motion.div>
-);
+          <div className="flex gap-4 w-full">
+            <button onClick={onClose} className="btn-secondary flex-1 py-3 text-base">
+              Cancel
+            </button>
+            <Link
+              to="/cage"
+              onClick={onClose}
+              className="btn-primary flex-1 py-3 text-base flex items-center justify-center"
+            >
+              I Consent, Start Quiz
+            </Link>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
 };
 
 
 // Enhanced Image Carousel Component with overlay text
 const ImageCarousel = () => {
   const [currentImage, setCurrentImage] = useState(0);
-  
+
   const images = [
     {
       url: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -110,7 +106,7 @@ const ImageCarousel = () => {
 
   return (
     <div className="relative w-full h-96 overflow-hidden rounded-2xl shadow-2xl">
-      <div 
+      <div
         className="flex transition-transform duration-700 ease-in-out h-full"
         style={{ transform: `translateX(-${currentImage * 100}%)` }}
       >
@@ -122,9 +118,9 @@ const ImageCarousel = () => {
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-            
+
             <div className="absolute bottom-8 left-8 text-white">
-              <motion.h3 
+              <motion.h3
                 key={`title-${index}-${currentImage}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: index === currentImage ? 1 : 0, y: index === currentImage ? 0 : 20 }}
@@ -133,7 +129,7 @@ const ImageCarousel = () => {
               >
                 {image.title}
               </motion.h3>
-              <motion.p 
+              <motion.p
                 key={`subtitle-${index}-${currentImage}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: index === currentImage ? 1 : 0, y: index === currentImage ? 0 : 20 }}
@@ -151,19 +147,17 @@ const ImageCarousel = () => {
         {images.map((_, index) => (
           <button
             key={index}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentImage ? 'bg-white scale-110' : 'bg-white/50 hover:bg-white/75'
-            }`}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentImage ? 'bg-white scale-110' : 'bg-white/50 hover:bg-white/75'
+              }`}
             onClick={() => setCurrentImage(index)}
           />
         ))}
       </div>
 
-      {/* Progress Bar (style remains the same for simplicity) */}
       <div className="absolute bottom-0 left-0 w-full h-1 bg-black/20">
-        <div 
+        <div
           className="h-full bg-white transition-all duration-5000 ease-linear"
-          style={{ 
+          style={{
             width: `${((currentImage + 1) / images.length) * 100}%`,
             animation: `progress-${currentImage} 5000ms linear infinite`
           }}
@@ -173,12 +167,12 @@ const ImageCarousel = () => {
   );
 };
 
-// Enhanced Hero Component with WhatsApp Integration
-const Hero = () => (
+// ➡️ Updated Hero Component: Accepts prop to open appointment modal
+const Hero = ({ onBookAppointment }) => (
   <div className="hero-section">
     <div className="hero-content">
       <div className="hero-decoration" />
-      
+
       <div className="flex flex-col items-center gap-12 max-w-7xl mx-auto relative z-10">
         <div className="text-center max-w-4xl">
           <motion.div
@@ -192,8 +186,8 @@ const Hero = () => (
               <span className="hero-title-accent">Embracing Wellness</span>
             </h1>
           </motion.div>
-          
-          <motion.p 
+
+          <motion.p
             className="hero-subtitle mb-8"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -201,30 +195,28 @@ const Hero = () => (
           >
             Discover comprehensive mental wellness solutions tailored to your unique needs. Our expert team provides compassionate care through evidence-based therapeutic approaches in a supportive, healing environment.
           </motion.p>
-          
-          <motion.div 
+
+          <motion.div
             className="flex flex-col sm:flex-row gap-6 justify-center mb-12"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            {/* ➡️ DIRECT WhatsApp Button for Hero CTA (NO MODAL) */}
-            <WhatsAppButton 
-              className="btn-large"
-              message="Hello! I'm interested in starting my wellness journey with MOWET Kenya. Can you help me book an appointment?"
+            {/* ➡️ MODIFIED: Replaced WhatsAppButton with standard Button trigger for Modal */}
+            <button
+              onClick={onBookAppointment}
+              className="btn-primary btn-large whitespace-nowrap"
             >
-              <span>Start Your Journey</span>
-              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </WhatsAppButton>
+              Start Your Journey
+            </button>
+            
             <button className="btn-secondary btn-large">
               Explore Services
             </button>
           </motion.div>
         </div>
 
-        <motion.div 
+        <motion.div
           className="w-full max-w-2xl"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -233,7 +225,7 @@ const Hero = () => (
           <ImageCarousel />
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="flex flex-wrap justify-center items-center gap-8 text-sm text-gray-500 mt-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -264,9 +256,9 @@ const SectionTitle = ({ children }) => (
 const ServiceCard = ({ icon, title, description }) => (
   <div className="service-card">
     <div className="service-icon">
-      {React.cloneElement(icon, { 
-        className: "w-8 h-8", 
-        style: { color: 'white' } 
+      {React.cloneElement(icon, {
+        className: "w-8 h-8",
+        style: { color: 'white' }
       })}
     </div>
     <h3 className="service-title">{title}</h3>
@@ -275,11 +267,12 @@ const ServiceCard = ({ icon, title, description }) => (
 );
 
 const Home = () => {
-  // ➡️ New state for the CAGE Consent Modal
+  // ➡️ State for CAGE Modal
   const [isCageModalOpen, setIsCageModalOpen] = useState(false);
-  
+  // ➡️ State for Appointment Modal
+  const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
+
   const services = [
-    // ... (services data)
     {
       icon: <FiHome />,
       title: 'Inpatient Rehabilitation',
@@ -303,7 +296,6 @@ const Home = () => {
   ];
 
   const testimonials = [
-    // ... (testimonials data)
     {
       name: 'Sarah M.',
       location: 'Nairobi, Kenya',
@@ -331,21 +323,28 @@ const Home = () => {
     <>
       {/* Floating WhatsApp Button */}
       <WhatsAppFloat />
-      
-      {/* ➡️ 1. CAGE Consent Modal Integration */}
+
+      {/* ➡️ CAGE Consent Modal Integration */}
       {isCageModalOpen && (
-        <CageConsentModal 
-          isOpen={isCageModalOpen} 
-          onClose={() => setIsCageModalOpen(false)} 
+        <CageConsentModal
+          isOpen={isCageModalOpen}
+          onClose={() => setIsCageModalOpen(false)}
         />
       )}
-      
+
+      {/* ➡️ Appointment Modal Integration */}
+      <AppointmentModal
+        isOpen={isAppointmentModalOpen}
+        onClose={() => setIsAppointmentModalOpen(false)}
+      />
+
       <main className="px-4 md:px-10 lg:px-20 py-8 flex justify-center" style={{ backgroundColor: 'var(--light-bg)' }}>
         <div className="layout-content-container flex flex-col max-w-6xl w-full">
-          <Hero />
+          
+          {/* Passed the handler to Hero */}
+          <Hero onBookAppointment={() => setIsAppointmentModalOpen(true)} />
 
           <SectionTitle>Our Services</SectionTitle>
-          {/* ... (Services grid) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service, index) => (
               <motion.div
@@ -365,7 +364,6 @@ const Home = () => {
           </div>
 
           <SectionTitle>What Our Clients Say</SectionTitle>
-          {/* ... (Testimonials grid) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-10">
             {testimonials.map((t, index) => (
               <motion.div
@@ -417,23 +415,21 @@ const Home = () => {
                 Take the first step toward better mental health. Our professionals are here to support you every step of the way.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                {/* ➡️ MODIFIED: Button now opens the CAGE Consent Modal */}
                 <button
-                    onClick={() => setIsCageModalOpen(true)}
-                    className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-white text-gray-900 rounded-lg shadow-xl hover:bg-gray-100 transition-all duration-300 border-2 border-white"
-                    style={{ textShadow: 'none' }}
+                  onClick={() => setIsCageModalOpen(true)}
+                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-white text-gray-900 rounded-lg shadow-xl hover:bg-gray-100 transition-all duration-300 border-2 border-white"
+                  style={{ textShadow: 'none' }}
                 >
-                    Get Started (CAGE Test)
+                  Get Started (CAGE Test)
                 </button>
-                
-                {/* ➡️ MODIFIED: WhatsApp Button is DIRECT (NO MODAL) */}
-                <WhatsAppButton
-                  variant="secondary"
-                  className="px-8 py-4 text-lg font-bold text-white rounded-lg border-2 border-white hover:bg-white hover:text-gray-900"
-                  message="Hi! I saw your wellness journey section. I'd like to learn more about your services and book an appointment."
+
+                {/* ➡️ MODIFIED: Bottom button also triggers the Appointment Modal for consistency */}
+                <button
+                  onClick={() => setIsAppointmentModalOpen(true)}
+                  className="px-8 py-4 text-lg font-bold text-white rounded-lg border-2 border-white hover:bg-white hover:text-gray-900 transition-all duration-300"
                 >
                   Book Appointment
-                </WhatsAppButton>
+                </button>
               </div>
             </div>
           </motion.div>

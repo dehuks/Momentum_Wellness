@@ -10,7 +10,8 @@ const LOCAL_API_URL = "http://localhost:5000/api/blogs";
 
 // PRODUCTION API (Hostafrica cPanel/PHP/MySQL)
 // Replace 'https://yourdomain.com' with your actual domain when deploying
-const PROD_API_URL = "https://yourdomain.com/api/blog_api.php"; 
+const PROD_API_URL = "https://mowet.co.ke/wp-json/wp/v2/posts";
+
 // ---------------------
 
 const PUBLIC_API_URL = IS_LOCAL_DEV ? LOCAL_API_URL : PROD_API_URL;
@@ -36,12 +37,13 @@ const Blog = () => {
         
         // Data mapping to handle PostgreSQL snake_case fields (e.g., image_id)
         // Only display posts that are marked as published (is_published = 1 or true).
-        const publishedPosts = data
-            .filter(doc => doc.is_published === true || doc.is_published === 1)
-            .map((doc) => ({
-                ...doc,
-                imageUrl: doc.image_id, // Assuming image_id stores the full URL or path
-            }));
+        const publishedPosts = data.map(post => ({
+  id: post.id,
+  title: post.title.rendered,
+  excerpt: post.excerpt.rendered,
+  imageUrl: post.featured_media_url, // optional
+}));
+
         
         setPosts(publishedPosts);
 

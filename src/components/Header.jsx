@@ -5,7 +5,6 @@ import { FiMenu, FiX } from 'react-icons/fi';
 import logo from '../assets/mowet_logo.png';
 import AppointmentModal from '../AppointmentModal'; 
 
-
 const navItems = [
   { name: 'Home', path: '/' },
   { name: 'About Us', path: '/about' },
@@ -13,8 +12,6 @@ const navItems = [
   { name: 'Blog', path: 'https://mowet.co.ke/blog', external: true },
   { name: 'Contact', path: '/contact' },
 ];
-
-
 
 const containerVariants = {
   hidden: { opacity: 0, y: -20 },
@@ -35,23 +32,19 @@ const itemVariants = {
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  // ➡️ New state for the Booking Modal
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-  
-  // ➡️ Helper function to open the booking modal and close the mobile menu
+
   const handleBookAppointmentClick = () => {
     setIsBookingModalOpen(true);
-    // Ensure mobile menu closes if user clicks the button inside the menu
-    if (isMobileMenuOpen) {
-        setIsMobileMenuOpen(false);
-    }
-  }
+    if (isMobileMenuOpen) setIsMobileMenuOpen(false);
+  };
 
   useEffect(() => {
-    // Control body scroll based on *either* modal or mobile menu being open
-    document.body.style.overflow = (isMobileMenuOpen || isBookingModalOpen) ? 'hidden' : 'auto';
+    document.body.style.overflow =
+      isMobileMenuOpen || isBookingModalOpen ? 'hidden' : 'auto';
+
     return () => {
       document.body.style.overflow = 'auto';
     };
@@ -59,7 +52,6 @@ const Header = () => {
 
   return (
     <>
-      {/* ➡️ 1. Appointment Modal Integration */}
       <AppointmentModal 
         isOpen={isBookingModalOpen} 
         onClose={() => setIsBookingModalOpen(false)} 
@@ -67,7 +59,8 @@ const Header = () => {
 
       {/* Main Header */}
       <header className="sticky top-0 z-30 bg-[var(--card-bg)]/90 backdrop-blur-md border-b border-[var(--border-color)] px-4 md:px-10 py-3 flex items-center justify-between shadow-sm">
-        {/* Logo Section */}
+        
+        {/* Logo */}
         <NavLink to="/" className="flex items-center gap-4">
           <img src={logo} alt="Mowet Kenya Logo" className="h-10 w-auto" />
           <h2 className="text-[var(--text-primary)] text-lg font-bold tracking-tight">
@@ -77,31 +70,40 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-10">
-          {navItems.map(({ name, path }) => (
-            <NavLink
-              key={name}
-              to={path}
-              className={({ isActive }) =>
-                `text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'text-[var(--primary)]'
-                    : 'text-[var(--text-primary)] hover:text-[var(--primary)]'
-                }`
-              }
-            >
-              {name}
-            </NavLink>
-          ))}
-          {/* ➡️ Desktop Button opens the Modal */}
-          <button 
-            className="btn-primary"
-            onClick={handleBookAppointmentClick}
-          >
+          {navItems.map(({ name, path, external }) =>
+            external ? (
+              <a
+                key={name}
+                href={path}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors"
+              >
+                {name}
+              </a>
+            ) : (
+              <NavLink
+                key={name}
+                to={path}
+                className={({ isActive }) =>
+                  `text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'text-[var(--primary)]'
+                      : 'text-[var(--text-primary)] hover:text-[var(--primary)]'
+                  }`
+                }
+              >
+                {name}
+              </NavLink>
+            )
+          )}
+
+          <button className="btn-primary" onClick={handleBookAppointmentClick}>
             <span className="truncate">Book Appointment</span>
           </button>
         </nav>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu Toggle */}
         <div className="md:hidden flex items-center gap-4 z-40 relative">
           <button onClick={toggleMenu} className="text-[var(--text-primary)]">
             {isMobileMenuOpen ? <FiX size={28} /> : <FiMenu size={28} />}
@@ -131,26 +133,40 @@ const Header = () => {
           >
             <div className="relative z-10 flex flex-col items-center justify-center h-full px-6">
               <div className="flex flex-col items-center gap-8 text-center max-w-sm w-full">
-                {navItems.map(({ name, path }) => (
+
+                {navItems.map(({ name, path, external }) => (
                   <motion.div key={name} variants={itemVariants} className="w-full">
-                    <NavLink
-                      to={path}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block text-2xl font-medium text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors py-2 px-4 rounded-lg hover:bg-[var(--light-bg)]"
-                    >
-                      {name}
-                    </NavLink>
+                    {external ? (
+                      <a
+                        href={path}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block text-2xl font-medium text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors py-2 px-4 rounded-lg hover:bg-[var(--light-bg)]"
+                      >
+                        {name}
+                      </a>
+                    ) : (
+                      <NavLink
+                        to={path}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block text-2xl font-medium text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors py-2 px-4 rounded-lg hover:bg-[var(--light-bg)]"
+                      >
+                        {name}
+                      </NavLink>
+                    )}
                   </motion.div>
                 ))}
+
                 <motion.div variants={itemVariants} className="mt-6 w-full">
-                  {/* ➡️ Mobile Button opens the Modal */}
                   <button
                     className="btn-primary w-full py-4 text-lg font-semibold"
-                    onClick={handleBookAppointmentClick} // Use the new handler
+                    onClick={handleBookAppointmentClick}
                   >
                     <span className="truncate">Book Appointment</span>
                   </button>
                 </motion.div>
+
               </div>
             </div>
           </motion.div>
