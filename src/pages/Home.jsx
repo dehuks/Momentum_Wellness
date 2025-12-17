@@ -71,6 +71,143 @@ const CageConsentModal = ({ isOpen, onClose }) => {
   );
 };
 
+const SupportCauseModal = ({ isOpen, onClose }) => {
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [amount, setAmount] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [feedback, setFeedback] = useState('');
+
+  const initiateSupportPayment = async () => {
+    if (!phoneNumber || !amount) {
+      setFeedback('Please enter both phone number and amount.');
+      return;
+    }
+
+    // Validate phone number format
+    const formattedPhone = phoneNumber.trim().replace(/\s+/g, '');
+    if (!/^(254|0)[17]\d{8}$/.test(formattedPhone)) {
+      setFeedback('Please enter a valid Kenyan phone number (e.g., 0712345678 or 254712345678)');
+      return;
+    }
+
+    // Validate amount
+    if (parseFloat(amount) < 1) {
+      setFeedback('Minimum donation amount is KES 1');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setFeedback('Initiating payment...');
+
+      // Create FormData as Flask expects form data
+      const formData = new FormData();
+      formData.append('phone_number', formattedPhone);
+      formData.append('amount', amount);
+
+      const response = await fetch('https://pay.mowet.co.ke/initiate-payment', {
+        method: 'POST',
+        body: formData
+      });
+
+      // Handle non-JSON responses or Server Errors
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server Error (${response.status}): ${errorText}`);
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        setFeedback('✓ Payment request sent! Please check your phone and enter your M-Pesa PIN.');
+      } else {
+        setFeedback(`Payment failed: ${data.error || 'Unknown error'}. Please try again.`);
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      
+      // If payment prompt appeared but frontend crashed, reassure user
+      if (error.message.includes('JSON')) {
+          setFeedback('✓ Request sent! If you saw the M-Pesa prompt, the payment is processing.');
+      } else {
+          setFeedback('Connection error. Please check your internet and try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
+      <motion.div
+        className="w-full max-w-md p-6 bg-white rounded-xl shadow-2xl relative"
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition-colors"
+        >
+          <FiX size={24} />
+        </button>
+
+        <h3 className="text-2xl font-bold mb-4 text-[var(--text-primary)]">Support Our Cause</h3>
+        <p className="text-gray-600 mb-6">Your contribution helps us provide mental wellness support to those in need.</p>
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">M-Pesa Phone Number</label>
+            <input
+              type="text"
+              placeholder="07XX XXX XXX"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Amount (KES)</label>
+            <input
+              type="number"
+              placeholder="e.g. 100"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+
+          {feedback && (
+            <p className={`text-sm ${feedback.includes('✓') ? 'text-green-600' : 'text-red-500'}`}>
+              {feedback}
+            </p>
+          )}
+
+          <button
+            onClick={initiateSupportPayment}
+            disabled={loading}
+            className={`w-full py-3 rounded-lg text-white font-bold transition-all ${
+              loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
+            }`}
+          >
+            {loading ? 'Processing...' : 'Donate via M-Pesa'}
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+
 
 // Enhanced Image Carousel Component with overlay text
 const ImageCarousel = () => {
@@ -271,6 +408,9 @@ const Home = () => {
   const [isCageModalOpen, setIsCageModalOpen] = useState(false);
   // ➡️ State for Appointment Modal
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
+  // ➡️ State for Support Cause Modal
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
+
 
   const services = [
     {
@@ -321,6 +461,11 @@ const Home = () => {
 
   return (
     <>
+    <SupportCauseModal
+         isOpen={isSupportModalOpen}
+          onClose={() => setIsSupportModalOpen(false)}
+    />
+
       {/* Floating WhatsApp Button */}
       <WhatsAppFloat />
 
@@ -430,6 +575,14 @@ const Home = () => {
                 >
                   Book Appointment
                 </button>
+                <button
+                    onClick={() => setIsSupportModalOpen(true)}
+                    className="px-8 py-4 text-lg font-bold text-white rounded-lg border-2 border-white
+                               hover:bg-white hover:text-gray-900 transition-all duration-300"
+                >
+                  Support Our Cause
+                </button>
+
               </div>
             </div>
           </motion.div>
