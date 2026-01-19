@@ -7,9 +7,8 @@ import About from './pages/About';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
 import CageQuestionnaire from './pages/CageQuestionnaire';
-
-
-
+import Phq9Questionnaire from './pages/Phq9Questionnaire';
+import AnxietyQuestionnaire from './pages/AnxietyQuestionnaire';
 
 
 const App = () => {
@@ -26,7 +25,8 @@ const App = () => {
             <Route path="/services" element={<Services />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/cage" element={<CageQuestionnaire />} />
-            
+            <Route path="/phq9" element={<Phq9Questionnaire />} />
+            <Route path="/anxiety" element={<AnxietyQuestionnaire />} />
           </Routes>
         </main>
         <Footer />
