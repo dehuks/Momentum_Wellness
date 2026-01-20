@@ -9,6 +9,7 @@ import Contact from './pages/Contact';
 import CageQuestionnaire from './pages/CageQuestionnaire';
 import Phq9Questionnaire from './pages/Phq9Questionnaire';
 import AnxietyQuestionnaire from './pages/AnxietyQuestionnaire';
+import BurnoutQuestionnaire from './pages/BurnoutQuestionnaire';
 
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
             <Route path="/cage" element={<CageQuestionnaire />} />
             <Route path="/phq9" element={<Phq9Questionnaire />} />
             <Route path="/anxiety" element={<AnxietyQuestionnaire />} />
+            <Route path="/burnout" element={<BurnoutQuestionnaire />} />
           </Routes>
         </main>
         <Footer />

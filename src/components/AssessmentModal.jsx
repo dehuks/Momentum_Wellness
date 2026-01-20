@@ -12,7 +12,8 @@ const AssessmentModal = ({ isOpen, onClose }) => {
     const tests = [
         { id: 'cage', name: 'Alcohol Use (CAGE)', route: '/cage', icon: <FiActivity /> },
         { id: 'phq9', name: 'Depression (PHQ-9)', route: '/phq9', icon: <FiAlertCircle /> },
-        { id: 'anxiety', name: 'Anxiety & Burnout', route: '/anxiety', icon: <FiUser /> },
+        { id: 'anxiety', name: 'Anxiety (Beck\'s Inventory)', route: '/anxiety', icon: <FiUser /> },
+        { id: 'burnout', name: 'Burnout (Maslach\'s Inventory)', route: '/burnout', icon: <FiUser /> },
     ];
 
     const handleContactSubmit = (e) => {
@@ -33,7 +34,8 @@ const AssessmentModal = ({ isOpen, onClose }) => {
         console.log("Selected Test:", selectedTest);
 
         onClose();
-        navigate(selectedTest.route);
+        onClose();
+        navigate(selectedTest.route, { state: { contactData } });
         // Reset for next time
         setStep(1);
         setContactData({ name: '', contact: '' });
