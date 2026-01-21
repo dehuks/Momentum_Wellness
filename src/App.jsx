@@ -10,6 +10,9 @@ import CageQuestionnaire from './pages/CageQuestionnaire';
 import Phq9Questionnaire from './pages/Phq9Questionnaire';
 import AnxietyQuestionnaire from './pages/AnxietyQuestionnaire';
 import BurnoutQuestionnaire from './pages/BurnoutQuestionnaire';
+import Careers from './pages/Careers';
+import AdminDashboard from './pages/AdminDashboard';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 const App = () => {
@@ -25,6 +28,12 @@ const App = () => {
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/careers" element={<Careers />} />
+            <Route path="/admin/applications" element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } />
             <Route path="/cage" element={<CageQuestionnaire />} />
             <Route path="/phq9" element={<Phq9Questionnaire />} />
             <Route path="/anxiety" element={<AnxietyQuestionnaire />} />
