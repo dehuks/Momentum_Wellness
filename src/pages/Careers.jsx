@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
+import { motion } from "framer-motion";
 import { FiUpload, FiCheckCircle, FiAlertCircle } from "react-icons/fi";
 import { careersService } from "../lib/careersService";
-import cnta from "../assets/contact.png"; // Using same image for now or we could use another one if available
+import cnta from "../assets/contact.png";
 
 const Careers = () => {
     const formRef = useRef();
@@ -73,15 +74,25 @@ const Careers = () => {
             className="py-16 px-4 md:px-10 lg:px-20"
             style={{ backgroundColor: "var(--light-bg)", color: "var(--text-primary)" }}
         >
-            <div className="max-w-4xl mx-auto text-center mb-10">
+            <motion.div
+                className="max-w-4xl mx-auto text-center mb-10"
+                initial={{ opacity: 0, y: -24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55 }}
+            >
                 <h2 className="section-title">Work With Us</h2>
                 <p className="page-description">
                     Join our team and help us make a difference in mental wellness.
                     We are looking for passionate individuals to join our mission.
                 </p>
-            </div>
+            </motion.div>
 
-            <div className="max-w-3xl mx-auto card">
+            <motion.div
+                className="max-w-3xl mx-auto card"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.2 }}
+            >
                 <h3 className="text-xl font-bold text-[var(--text-primary)] mb-6">
                     Job Application
                 </h3>
@@ -229,7 +240,7 @@ const Careers = () => {
                         {status === "submitting" ? "Submitting..." : "Submit Application"}
                     </button>
                 </form>
-            </div>
+            </motion.div>
         </section>
     );
 };

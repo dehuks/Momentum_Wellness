@@ -427,9 +427,9 @@ const Hero = ({ onBookAppointment }) => (
               Start Your Journey
             </button>
 
-            <button className="btn-secondary btn-large">
+            <Link to="/services" className="btn-secondary btn-large">
               Explore Services
-            </button>
+            </Link>
           </motion.div>
         </div>
 
@@ -474,8 +474,7 @@ const ServiceCard = ({ icon, title, description }) => (
   <div className="service-card">
     <div className="service-icon">
       {React.cloneElement(icon, {
-        className: "w-8 h-8",
-        style: { color: 'white' }
+        className: "w-7 h-7",
       })}
     </div>
     <h3 className="service-title">{title}</h3>
@@ -667,25 +666,25 @@ const Home = () => {
         </div>
 
         <style jsx>{`
-          /* All your existing styles remain the same */
+          /* Colour tokens — aligned with index.css */
           :root {
-            --primary: rgb(121, 159, 206);
-            --primary-hover: #3B82F6;
-            --accent:rgb(255, 208, 206);
-            --accent-hover: rgb(94, 59, 173);
-            --light-bg: rgb(255, 255, 255);
-            --card-bg:rgb(255, 254, 254);
-            --border-color: #E5E7EB;
-            --border-secondary: #D1D5DB;
-            --text-primary: #1F2937;
-            --text-secondary: #6B7280;
-            --gradient-primary: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
-            --gradient-accent: linear-gradient(135deg, #DBEAFE 0%, #93C5FD 100%);
-            --gradient-hero: linear-gradient(135deg, #F8FAFC 0%, #EBF4FF 50%, #F8FAFC 100%);
-            --shadow-primary: 0 4px 15px rgba(96, 165, 250, 0.2);
-            --shadow-accent: 0 4px 15px rgba(167, 139, 250, 0.2);
-            --shadow-hover: 0 20px 40px rgba(96, 165, 250, 0.15);
-            --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --primary: #0D9488;
+            --primary-hover: #0F766E;
+            --accent: #2DD4BF;
+            --accent-hover: #14B8A6;
+            --light-bg: #F8FAFC;
+            --card-bg: #FFFFFF;
+            --border-color: #E2E8F0;
+            --border-secondary: #CBD5E1;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --gradient-primary: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%);
+            --gradient-accent: linear-gradient(135deg, #F0FDFA 0%, #CCFBF1 100%);
+            --gradient-hero: linear-gradient(135deg, #F8FAFC 0%, #F0FDFA 50%, #F8FAFC 100%);
+            --shadow-primary: 0 4px 15px rgba(13, 148, 136, 0.28);
+            --shadow-accent: 0 4px 15px rgba(45, 212, 191, 0.2);
+            --shadow-hover: 0 20px 40px rgba(13, 148, 136, 0.2);
+            --shadow-light: 0 2px 8px rgba(15, 23, 42, 0.07);
           }
 
           .btn-primary {
@@ -731,14 +730,6 @@ const Home = () => {
             box-shadow: var(--shadow-hover);
           }
 
-          .btn-large {
-            height: 3.5rem;
-            padding-left: 2rem;
-            padding-right: 2rem;
-            font-size: 1.125rem;
-            border-radius: 1.25rem;
-          }
-
           .btn-secondary {
             display: inline-flex;
             height: 2.5rem;
@@ -765,6 +756,15 @@ const Home = () => {
             color: white;
             box-shadow: var(--shadow-primary);
             transform: translateY(-2px);
+          }
+
+          /* btn-large must come after btn-secondary/btn-primary to win the cascade */
+          .btn-large {
+            height: 3.5rem;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            font-size: 1.125rem;
+            border-radius: 1.25rem;
           }
 
           .hero-section {
@@ -799,14 +799,14 @@ const Home = () => {
 
           .hero-title {
             font-size: 3rem;
-            font-weight: 900;
+            font-weight: 800;
             line-height: 1.1;
             letter-spacing: -0.02em;
-            color: var(--text-primary);
+            color: #134E4A;
           }
 
           .hero-title-accent {
-            background: var(--gradient-primary);
+            background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -823,10 +823,10 @@ const Home = () => {
 
           .section-title {
             font-size: 2.25rem;
-            font-weight: 900;
-            line-height: 1.1;
-            letter-spacing: -0.033em;
-            color: var(--text-primary);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            color: #134E4A;
             text-align: center;
             margin-bottom: 2rem;
             margin-top: 4rem;
@@ -836,10 +836,10 @@ const Home = () => {
           .section-title::after {
             content: '';
             display: block;
-            width: 60px;
-            height: 4px;
+            width: 48px;
+            height: 3px;
             background: var(--gradient-primary);
-            margin: 1rem auto;
+            margin: 0.75rem auto 0;
             border-radius: 2px;
           }
 
@@ -883,26 +883,33 @@ const Home = () => {
 
           .service-icon {
             display: flex;
-            height: 4rem;
-            width: 4rem;
+            height: 3.5rem;
+            width: 3.5rem;
             align-items: center;
             justify-content: center;
             border-radius: 1rem;
-            background: var(--gradient-primary);
-            color: white;
-            box-shadow: var(--shadow-primary);
-            transition: transform 0.3s ease;
+            background: #FFFFFF;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(13, 148, 136, 0.1);
+            transition: all 0.3s ease;
           }
 
           .service-card:hover .service-icon {
-            transform: scale(1.1);
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-primary);
           }
 
           .service-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            line-height: 1.2;
-            color: var(--text-primary);
+            font-size: 1.125rem;
+            font-weight: 600;
+            line-height: 1.3;
+            color: #134E4A;
+            min-height: 2.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
 
           .service-description {

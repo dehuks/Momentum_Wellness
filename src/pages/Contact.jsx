@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { motion } from "framer-motion";
 import { FiMail, FiPhone, FiMapPin } from "react-icons/fi";
 import emailjs from '@emailjs/browser';
 import cnta from "../assets/contact.png";
@@ -109,91 +110,100 @@ const Contact = () => {
       style={{ backgroundColor: "var(--light-bg)", color: "var(--text-primary)" }}
     >
       {/* Heading */}
-      <div className="max-w-4xl mx-auto text-center">
+      <motion.div
+        className="max-w-4xl mx-auto text-center"
+        initial={{ opacity: 0, y: -24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55 }}
+      >
         <h2 className="section-title">Contact Us</h2>
         <p className="page-description">
-          We're here to help. Reach out to us with any questions or to schedule an appointment.  
+          We're here to help. Reach out to us with any questions or to schedule an appointment.
           Our team typically responds within 24 hours.
         </p>
-      </div>
+      </motion.div>
 
       {/* Hero Image */}
-      <div className="mt-10 max-w-3xl mx-auto">
+      <motion.div
+        className="mt-10 max-w-3xl mx-auto"
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, delay: 0.15 }}
+      >
         <img
           src={cnta}
           alt="Our Team"
           className="rounded-2xl shadow-lg w-full object-cover"
         />
-      </div>
+      </motion.div>
 
       {/* Contact Info + Form */}
       <div className="mt-16 grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
         {/* Contact Info */}
         <div className="space-y-6">
-          <div className="card flex items-start gap-4">
-            <FiMail className="text-[var(--primary)] text-2xl flex-shrink-0" />
-            <div>
-              <h3 className="font-semibold text-[var(--text-primary)] mb-1">Email</h3>
-              <a 
-                href="mailto:tech@mowet.co.ke"
-                className="text-[var(--text-secondary)] hover:text-[var(--primary)] transition-colors"
-              >
-                info@mowet.co.ke
-              </a>
-            </div>
-          </div>
-          
-          <div className="card flex items-start gap-4">
-            <FiPhone className="text-[var(--primary)] text-2xl flex-shrink-0" />
-            <div>
-              <h3 className="font-semibold text-[var(--text-primary)] mb-1">Phone</h3>
-              <div className="flex flex-col text-[var(--text-secondary)]">
-                <a
-                  href="tel:+254707727913"
-                  className="hover:text-[var(--primary)] transition-colors"
-                >
-                  0707 727 913
+          {[
+            {
+              icon: <FiMail className="text-[var(--primary)] text-2xl flex-shrink-0" />,
+              label: "Email",
+              content: (
+                <a href="mailto:info@mowet.co.ke" className="text-[var(--text-secondary)] hover:text-[var(--primary)] transition-colors">
+                  info@mowet.co.ke
                 </a>
-                <a
-                  href="tel:+254720200220"
-                  className="hover:text-[var(--primary)] transition-colors"
-                >
-                  0720 200 220
-                </a>
+              ),
+            },
+            {
+              icon: <FiPhone className="text-[var(--primary)] text-2xl flex-shrink-0" />,
+              label: "Phone",
+              content: (
+                <div className="flex flex-col text-[var(--text-secondary)]">
+                  <a href="tel:+254707727913" className="hover:text-[var(--primary)] transition-colors">0707 727 913</a>
+                  <a href="tel:+254720200220" className="hover:text-[var(--primary)] transition-colors">0720 200 220</a>
+                </div>
+              ),
+            },
+            {
+              icon: <FiMapPin className="text-[var(--primary)] text-2xl flex-shrink-0" />,
+              label: "Location",
+              content: <p className="text-[var(--text-secondary)]">Nairobi, Kenya</p>,
+            },
+          ].map((item, i) => (
+            <motion.div
+              key={item.label}
+              className="card flex items-start gap-4"
+              initial={{ opacity: 0, x: -24 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.45, delay: 0.2 + i * 0.1 }}
+            >
+              {item.icon}
+              <div>
+                <h3 className="font-semibold text-[var(--text-primary)] mb-1">{item.label}</h3>
+                {item.content}
               </div>
-            </div>
-          </div>
-          
-          <div className="card flex items-start gap-4">
-            <FiMapPin className="text-[var(--primary)] text-2xl flex-shrink-0" />
-            <div>
-              <h3 className="font-semibold text-[var(--text-primary)] mb-1">Location</h3>
-              <p className="text-[var(--text-secondary)]">Nairobi, Kenya</p>
-            </div>
-          </div>
+            </motion.div>
+          ))}
 
-          {/* Office Hours */}
-          <div className="card">
-            <h3 className="font-semibold text-[var(--text-primary)] mb-3">Office Hours</h3>
-            <div className="space-y-2 text-[var(--text-secondary)]">
-              <div className="flex justify-between">
-                <span>Monday - Friday</span>
-                <span className="font-medium">8:00 AM - 6:00 PM</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Saturday</span>
-                <span className="font-medium">9:00 AM - 2:00 PM</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Sunday</span>
-                <span className="font-medium text-red-500">Closed</span>
-              </div>
+          {/* Operating Hours */}
+          <motion.div
+            className="card"
+            initial={{ opacity: 0, x: -24 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.45, delay: 0.5 }}
+          >
+            <h3 className="font-semibold text-[var(--text-primary)] mb-3">Operating Hours</h3>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[var(--primary)]" />
+              <span className="text-[var(--primary)] font-semibold">24 / 7 — Always Available</span>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Contact Form */}
-        <div className="card">
+        <motion.div
+          className="card"
+          initial={{ opacity: 0, x: 24 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.55, delay: 0.25 }}
+        >
           <h3 className="text-xl font-bold text-[var(--text-primary)] mb-6">
             Send us a Message
           </h3>
@@ -388,11 +398,17 @@ const Contact = () => {
               </a>
             </p>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Google Maps Embed */}
-      <div className="mt-16 max-w-5xl mx-auto">
+      <motion.div
+        className="mt-16 max-w-5xl mx-auto"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+      >
         <h3 className="text-2xl font-bold text-[var(--text-primary)] text-center mb-6">
           Visit Our Office
         </h3>
@@ -407,7 +423,7 @@ const Contact = () => {
             loading="lazy"
           ></iframe>
         </div>
-      </div>
+      </motion.div>
 
       <style jsx>{`
         @keyframes fade-in {

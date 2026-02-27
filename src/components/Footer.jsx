@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import logo from '../assets/mowet_logo.png';
 
 const Footer = () => {
   return (
@@ -8,19 +10,16 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-[#16ce72] to-[#14b865] rounded-full flex items-center justify-center">
-                <svg
-                  className="w-4 h-4 text-white"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                </svg>
+            <div className="flex items-center space-x-3">
+              <img src={logo} alt="MOWET Kenya Logo" className="h-10 w-auto" />
+              <div className="flex flex-col leading-tight">
+                <h3 className="text-base font-bold text-[var(--text-primary)]">
+                  MOWET Kenya
+                </h3>
+                <span className="text-[10px] font-semibold tracking-widest text-[var(--primary)] uppercase">
+                  Momentum Wellness
+                </span>
               </div>
-              <h3 className="text-xl font-bold text-[var(--text-primary)]">
-                Momentum Wellness
-              </h3>
             </div>
             <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
               Empowering communities through comprehensive mental health and wellness programs. 
@@ -33,20 +32,27 @@ const Footer = () => {
             <h4 className="text-lg font-semibold text-[var(--text-primary)]">Quick Links</h4>
             <nav className="flex flex-col space-y-2">
               {[
-                { label: "About Us", href: "#about" },
-                { label: "Our Services", href: "#services" },
-                { label: "Programs", href: "#programs" },
-                { label: "Our Team", href: "#team" },
-                { label: "Contact", href: "#contact" },
+                { label: "About Us", to: "/about" },
+                { label: "Our Services", to: "/services" },
+                { label: "Careers", to: "/careers" },
+                { label: "Contact", to: "/contact" },
               ].map((link) => (
-                <a
+                <Link
                   key={link.label}
-                  href={link.href}
+                  to={link.to}
                   className="text-[var(--text-secondary)] hover:text-[var(--primary)] transition-colors text-sm"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
+              <a
+                href="https://mowet.co.ke/blog"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--text-secondary)] hover:text-[var(--primary)] transition-colors text-sm"
+              >
+                Blog
+              </a>
             </nav>
           </div>
 
@@ -136,6 +142,26 @@ const Footer = () => {
       </svg>
       <span className="text-[var(--text-secondary)]">Nairobi, Kenya</span>
     </div>
+
+    <div className="flex items-center space-x-3">
+      <svg
+        className="w-4 h-4 text-[var(--primary)] flex-shrink-0"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <div className="flex flex-col">
+        <span className="text-[var(--text-primary)] font-medium text-sm">Operating Hours</span>
+        <span className="text-[var(--primary)] font-semibold text-sm">24 / 7 — Always Available</span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -190,13 +216,13 @@ const Footer = () => {
                 className="group"
                 aria-label="Instagram"
               >
-                <div className="w-10 h-10 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-full flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-[#833ab4] group-hover:via-[#fd1d1d] group-hover:to-[#fcb045] transition-all duration-300 group-hover:scale-110">
+                <div className="w-10 h-10 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-full flex items-center justify-center group-hover:bg-gradient-to-tr group-hover:from-[#f9ce34] group-hover:via-[#ee2a7b] group-hover:to-[#6228d7] transition-all duration-300 group-hover:scale-110 group-hover:border-transparent">
                   <svg
                     className="w-5 h-5 text-[var(--text-secondary)] group-hover:text-white"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.618 5.367 11.986 11.988 11.986s11.987-5.368 11.987-11.986C24.014 5.367 18.635.001 12.017.001zM8.449 20.149c-1.434 0-2.608-1.175-2.608-2.608V6.459c0-1.434 1.174-2.608 2.608-2.608h7.102c1.434 0 2.608 1.174 2.608 2.608v11.082c0 1.433-1.174 2.608-2.608 2.608H8.449z" />
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
                   </svg>
                 </div>
               </a>
@@ -208,7 +234,7 @@ const Footer = () => {
         <div className="border-t border-[var(--border-color)] pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-[var(--text-secondary)] text-sm">
-              © 2025 Momentum Wellness Trust. All rights reserved.
+              © 2026 Momentum Wellness Trust. All rights reserved.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-6">
               {[
@@ -248,27 +274,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Newsletter Signup Section */}
-        <div className="mt-8 pt-8 border-t border-[var(--border-color)]">
-          <div className="max-w-md mx-auto text-center">
-            <h4 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
-              Stay Updated
-            </h4>
-            <p className="text-[var(--text-secondary)] text-sm mb-4">
-              Subscribe to our newsletter for wellness tips and program updates.
-            </p>
-            <div className="flex space-x-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-2 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] text-sm"
-              />
-              <button className="px-6 py-2 bg-gradient-to-r from-[#16ce72] to-[#14b865] text-white rounded-lg hover:from-[#14b865] hover:to-[#12a456] transition-all duration-300 text-sm font-medium">
-                Subscribe
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
     </footer>
   );
