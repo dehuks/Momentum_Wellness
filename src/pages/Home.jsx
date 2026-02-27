@@ -7,25 +7,47 @@ import AppointmentModal from '../AppointmentModal'; // Imported Modal
 import AssessmentModal from '../components/AssessmentModal'; // Imported Assessment Modal
 
 const SupportCauseModal = ({ isOpen, onClose }) => {
+  const [paymentMethod, setPaymentMethod] = useState('mpesa');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState('');
 
-  const initiateSupportPayment = async () => {
+  // Load Paystack inline script once
+  useEffect(() => {
+    if (!document.getElementById('paystack-inline-script')) {
+      const script = document.createElement('script');
+      script.id = 'paystack-inline-script';
+      script.src = 'https://js.paystack.co/v1/inline.js';
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+
+  // Reset state when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setFeedback('');
+      setPaymentMethod('mpesa');
+      setPhoneNumber('');
+      setEmail('');
+      setAmount('');
+    }
+  }, [isOpen]);
+
+  const initiateMpesaPayment = async () => {
     if (!phoneNumber || !amount) {
       setFeedback('Please enter both phone number and amount.');
       return;
     }
 
-    // Validate phone number format
     const formattedPhone = phoneNumber.trim().replace(/\s+/g, '');
     if (!/^(254|0)[17]\d{8}$/.test(formattedPhone)) {
       setFeedback('Please enter a valid Kenyan phone number (e.g., 0712345678 or 254712345678)');
       return;
     }
 
-    // Validate amount
     if (parseFloat(amount) < 1) {
       setFeedback('Minimum donation amount is KES 1');
       return;
@@ -35,7 +57,6 @@ const SupportCauseModal = ({ isOpen, onClose }) => {
       setLoading(true);
       setFeedback('Initiating payment...');
 
-      // Create FormData as Flask expects form data
       const formData = new FormData();
       formData.append('phone_number', formattedPhone);
       formData.append('amount', amount);
@@ -45,7 +66,6 @@ const SupportCauseModal = ({ isOpen, onClose }) => {
         body: formData
       });
 
-      // Handle non-JSON responses or Server Errors
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Server Error (${response.status}): ${errorText}`);
@@ -60,8 +80,6 @@ const SupportCauseModal = ({ isOpen, onClose }) => {
       }
     } catch (error) {
       console.error('Payment error:', error);
-
-      // If payment prompt appeared but frontend crashed, reassure user
       if (error.message.includes('JSON')) {
         setFeedback('✓ Request sent! If you saw the M-Pesa prompt, the payment is processing.');
       } else {
@@ -70,6 +88,61 @@ const SupportCauseModal = ({ isOpen, onClose }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const initiatePaystackPayment = () => {
+    if (!email || !amount) {
+      setFeedback('Please enter your email and amount.');
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setFeedback('Please enter a valid email address.');
+      return;
+    }
+
+    if (parseFloat(amount) < 1) {
+      setFeedback('Minimum donation amount is KES 1');
+      return;
+    }
+
+    if (!window.PaystackPop) {
+      setFeedback('Payment library not loaded yet. Please try again in a moment.');
+      return;
+    }
+
+    const handler = window.PaystackPop.setup({
+      key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
+      email,
+      amount: Math.round(parseFloat(amount) * 100), // Paystack uses smallest currency unit
+      currency: 'KES',
+      ref: `mowet_${Date.now()}`,
+      metadata: { purpose: 'Support Our Cause - Momentum Wellness' },
+      onSuccess: async (transaction) => {
+        setLoading(true);
+        setFeedback('Verifying payment...');
+        try {
+          const res = await fetch('/paystack/verify.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reference: transaction.reference }),
+          });
+          const data = await res.json();
+          if (data.success) {
+            setFeedback(`✓ Thank you! Your donation of KES ${data.amount} was received.`);
+          } else {
+            setFeedback('Payment received but verification pending. Contact us if you need confirmation.');
+          }
+        } catch {
+          setFeedback('✓ Payment successful! Thank you for supporting Momentum Wellness.');
+        } finally {
+          setLoading(false);
+        }
+      },
+      onCancel: () => setFeedback('Payment cancelled.'),
+    });
+
+    handler.openIframe();
   };
 
   if (!isOpen) return null;
@@ -95,46 +168,119 @@ const SupportCauseModal = ({ isOpen, onClose }) => {
           <FiX size={24} />
         </button>
 
-        <h3 className="text-2xl font-bold mb-4 text-[var(--text-primary)]">Support Our Cause</h3>
-        <p className="text-gray-600 mb-6">Your contribution helps us provide mental wellness support to those in need.</p>
+        <h3 className="text-2xl font-bold mb-2 text-[var(--text-primary)]">Support Our Cause</h3>
+        <p className="text-gray-600 mb-5">Your contribution helps us provide mental wellness support to those in need.</p>
+
+        {/* Payment method tabs */}
+        <div className="flex rounded-lg border border-gray-200 overflow-hidden mb-5">
+          <button
+            onClick={() => { setPaymentMethod('mpesa'); setFeedback(''); }}
+            className={`flex-1 py-2.5 text-sm font-semibold transition-colors ${
+              paymentMethod === 'mpesa'
+                ? 'bg-green-600 text-white'
+                : 'bg-white text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            M-Pesa
+          </button>
+          <button
+            onClick={() => { setPaymentMethod('card'); setFeedback(''); }}
+            className={`flex-1 py-2.5 text-sm font-semibold transition-colors border-l border-gray-200 ${
+              paymentMethod === 'card'
+                ? 'bg-[#0ba4db] text-white'
+                : 'bg-white text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            Card / Other
+          </button>
+        </div>
 
         <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">M-Pesa Phone Number</label>
-            <input
-              type="text"
-              placeholder="07XX XXX XXX"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
+          {paymentMethod === 'mpesa' ? (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">M-Pesa Phone Number</label>
+                <input
+                  type="text"
+                  placeholder="07XX XXX XXX"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+                />
+              </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Amount (KES)</label>
-            <input
-              type="number"
-              placeholder="e.g. 100"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Amount (KES)</label>
+                <input
+                  type="number"
+                  placeholder="e.g. 100"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+                />
+              </div>
 
-          {feedback && (
-            <p className={`text-sm ${feedback.includes('✓') ? 'text-green-600' : 'text-red-500'}`}>
-              {feedback}
-            </p>
+              {feedback && (
+                <p className={`text-sm ${feedback.includes('✓') ? 'text-green-600' : 'text-red-500'}`}>
+                  {feedback}
+                </p>
+              )}
+
+              <button
+                onClick={initiateMpesaPayment}
+                disabled={loading}
+                className={`w-full py-3 rounded-lg text-white font-bold transition-all ${
+                  loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
+                }`}
+              >
+                {loading ? 'Processing...' : 'Donate via M-Pesa'}
+              </button>
+            </>
+          ) : (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Amount (KES)</label>
+                <input
+                  type="number"
+                  placeholder="e.g. 100"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+              </div>
+
+              <p className="text-xs text-gray-500">
+                Supports Visa, Mastercard, and M-Pesa via Paystack.
+              </p>
+
+              {feedback && (
+                <p className={`text-sm ${feedback.includes('✓') ? 'text-green-600' : 'text-red-500'}`}>
+                  {feedback}
+                </p>
+              )}
+
+              <button
+                onClick={initiatePaystackPayment}
+                disabled={loading}
+                className={`w-full py-3 rounded-lg text-white font-bold transition-all ${
+                  loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#0ba4db] hover:bg-[#0993c5]'
+                }`}
+              >
+                {loading ? 'Verifying...' : 'Pay with Card / Paystack'}
+              </button>
+            </>
           )}
-
-          <button
-            onClick={initiateSupportPayment}
-            disabled={loading}
-            className={`w-full py-3 rounded-lg text-white font-bold transition-all ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
-              }`}
-          >
-            {loading ? 'Processing...' : 'Donate via M-Pesa'}
-          </button>
         </div>
       </motion.div>
     </motion.div>
