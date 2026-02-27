@@ -29,44 +29,44 @@ const Services = () => {
 
   const services = [
     {
-      icon: <FiShield className="w-8 h-8 text-[var(--primary)]" />,
+      icon: <FiShield className="w-7 h-7" />,
       title: "Home-Based Detox Program",
       description: "Discreet, medically-supervised detoxification in the comfort and privacy of your home.",
       details: "A premium service offering 24/7 professional support, medical monitoring, and a personalized recovery plan. Designed for individuals requiring absolute privacy and convenience while managing withdrawal safely.",
       highlight: true
     },
     {
-      icon: <FiHome className="w-8 h-8 text-[var(--primary)]" />,
+      icon: <FiHome className="w-7 h-7" />,
       title: "Inpatient Rehabilitation",
       description: "Comprehensive residential treatment for severe mental health conditions in a supportive environment.",
       details: "Our inpatient program provides 24/7 care with a multidisciplinary team including psychiatrists, psychologists, nurses, and therapists. Patients receive personalized treatment plans, medication management, group therapy, and life skills training."
     },
     {
-      icon: <FiUsers className="w-8 h-8 text-[var(--primary)]" />,
+      icon: <FiUsers className="w-7 h-7" />,
       title: "Psychological Counseling",
       description: "Individual and group therapy sessions to address emotional and behavioral challenges.",
       details: "We offer evidence-based therapies including CBT, DBT, and trauma-focused therapy. Our counselors specialize in depression, anxiety, PTSD, relationship issues, and more. Both in-person and telehealth options available."
     },
     {
-      icon: <FiBriefcase className="w-8 h-8 text-[var(--primary)]" />,
+      icon: <FiBriefcase className="w-7 h-7" />,
       title: "Occupational Therapy",
       description: "Therapy focused on improving daily living skills and functional abilities.",
       details: "Our occupational therapists help clients develop or regain skills needed for daily living and work. This includes cognitive rehabilitation, stress management techniques, and adaptive strategies for mental health challenges."
     },
     {
-      icon: <FiHeart className="w-8 h-8 text-[var(--primary)]" />,
+      icon: <FiHeart className="w-7 h-7" />,
       title: "Wellness Programs",
       description: "Holistic approaches to enhance overall mental and physical well-being.",
       details: "Our wellness programs include mindfulness meditation, yoga therapy, nutrition counseling, art therapy, and stress reduction workshops. Designed to promote resilience and prevent burnout."
     },
     {
-      icon: <FiZap className="w-8 h-8 text-[var(--primary)]" />,
+      icon: <FiZap className="w-7 h-7" />,
       title: "Neuropsychological Assessments",
       description: "Evaluations to assess cognitive functions and identify neurological issues.",
       details: "Comprehensive assessments for memory, attention, executive functioning, and more. Used to diagnose conditions like ADHD, dementia, traumatic brain injuries, and learning disabilities."
     },
     {
-      icon: <FiUserCheck className="w-8 h-8 text-[var(--primary)]" />,
+      icon: <FiUserCheck className="w-7 h-7" />,
       title: "Corporate Wellness & CSR",
       description: "Strategic wellness solutions aligning employee health with Corporate Social Responsibility goals.",
       details: "Our programs go beyond basic compliance, fostering a culture of holistic well-being. Services include CSR-aligned mental health initiatives, executive coaching, stress management workshops, and comprehensive Employee Assistance Programs (EAPs) that drive productivity and social impact."
@@ -125,7 +125,7 @@ const Services = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{
                 y: -5,
-                boxShadow: "0 10px 25px rgba(22, 206, 114, 0.2)"
+                boxShadow: "0 10px 30px rgba(13, 148, 136, 0.2)"
               }}
             >
               {service.highlight && (
