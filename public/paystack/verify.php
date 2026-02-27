@@ -1,12 +1,4 @@
 <?php
-/**
- * Paystack Transaction Verification
- *
- * Upload this file to: public_html/paystack/verify.php on HostAfrica cPanel
- *
- * Set PAYSTACK_SECRET_KEY in cPanel → Software → Environment Variables
- * Do NOT hardcode the secret key here.
- */
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -25,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
-// Get secret key from cPanel environment variables
 $secret = getenv('PAYSTACK_SECRET_KEY');
 
 if (!$secret) {
