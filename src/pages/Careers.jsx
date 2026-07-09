@@ -2,8 +2,6 @@ import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { FiUpload, FiCheckCircle, FiAlertCircle } from "react-icons/fi";
 import { careersService } from "../lib/careersService";
-import cnta from "../assets/contact.png";
-
 const Careers = () => {
     const formRef = useRef();
     const fileInputRefCV = useRef();

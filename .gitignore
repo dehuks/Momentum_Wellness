@@ -27,3 +27,6 @@ dist-ssr
 .env.local
 .env.*.local
 
+# Blog API secrets (DB credentials) - copy config.example.php to fill these in
+public/api/blog/config.php
+

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../assets/mowet_logo.png';
+import logo from '../assets/mowet_logo.png?format=webp';
 
 const Footer = () => {
   return (
@@ -11,7 +11,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <img src={logo} alt="MOWET Kenya Logo" className="h-10 w-auto" />
+              <img src={logo} alt="MOWET Kenya Logo" className="h-10 w-auto" loading="lazy" decoding="async" />
               <div className="flex flex-col leading-tight">
                 <h3 className="text-base font-bold text-[var(--text-primary)]">
                   MOWET Kenya
@@ -35,6 +35,7 @@ const Footer = () => {
                 { label: "About Us", to: "/about" },
                 { label: "Our Services", to: "/services" },
                 { label: "Careers", to: "/careers" },
+                { label: "Blog", to: "/blog" },
                 { label: "Contact", to: "/contact" },
               ].map((link) => (
                 <Link
@@ -45,14 +46,6 @@ const Footer = () => {
                   {link.label}
                 </Link>
               ))}
-              <a
-                href="https://mowet.co.ke/blog"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[var(--text-secondary)] hover:text-[var(--primary)] transition-colors text-sm"
-              >
-                Blog
-              </a>
             </nav>
           </div>
 

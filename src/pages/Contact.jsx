@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { FiMail, FiPhone, FiMapPin } from "react-icons/fi";
 import emailjs from '@emailjs/browser';
-import cnta from "../assets/contact.png";
+import cnta from "../assets/contact.png?format=webp";
 
 const Contact = () => {
   const formRef = useRef();
@@ -134,6 +134,7 @@ const Contact = () => {
           src={cnta}
           alt="Our Team"
           className="rounded-2xl shadow-lg w-full object-cover"
+          decoding="async"
         />
       </motion.div>
 
