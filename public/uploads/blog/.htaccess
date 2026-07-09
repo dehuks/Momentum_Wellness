@@ -1,0 +1,7 @@
+# Uploaded files must never be executable, even if a malicious file is
+# disguised as an image and slips past the upload validation in upload.php.
+php_flag engine off
+
+<FilesMatch "\.(php|phtml|php\d?)$">
+    Require all denied
+</FilesMatch>

@@ -8,8 +8,8 @@ import {
   FiCompass 
 } from 'react-icons/fi';
 import { motion } from 'framer-motion';
-import aboutImage from '../assets/about.png';
-import aboutImage2 from '../assets/image.png';
+import aboutImage from '../assets/about.png?format=webp';
+import aboutImage2 from '../assets/image.png?format=webp';
 
 const About = () => {
   const values = [
@@ -58,13 +58,14 @@ const About = () => {
             Momentum Wellness is a leading mental health service provider in Kenya, dedicated to promoting emotional well-being and resilience. Our team of experienced professionals offers comprehensive care tailored to individual needs.
           </motion.p>
 
-          <motion.img 
+          <motion.img
             src={aboutImage2}
             alt="About Momentum Wellness"
             className="rounded-xl w-full max-w-4xl h-72 md:h-96 object-cover shadow-md"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
+            decoding="async"
           />
         </div>
 
@@ -80,10 +81,12 @@ const About = () => {
 
         {/* About Image Full Width */}
         <div className="flex w-full my-6">
-          <img 
-            src={aboutImage} 
-            alt="Momentum Wellness Facility" 
-            className="rounded-xl w-full h-64 md:h-96 object-cover shadow-md" 
+          <img
+            src={aboutImage}
+            alt="Momentum Wellness Facility"
+            className="rounded-xl w-full h-64 md:h-96 object-cover shadow-md"
+            loading="lazy"
+            decoding="async"
           />
         </div>
 

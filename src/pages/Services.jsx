@@ -1,21 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import SectionTitle from '../components/SectionTitle';
-import {
-  FiHome,
-  FiUsers,
-  FiBriefcase,
-  FiHeart,
-  FiZap,
-  FiUserCheck,
-  FiShield
-} from 'react-icons/fi';
 import { motion } from 'framer-motion';
-import serviceImage from '../assets/services.png';
+import serviceImage from '../assets/services.png?format=webp';
 import AppointmentModal from '../AppointmentModal';
+import { services } from '../data/services';
+import { blogApi } from '../lib/blogApi';
 
 const Services = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
+  const [imageOverrides, setImageOverrides] = useState({});
+
+  useEffect(() => {
+    blogApi
+      .getSiteImages()
+      .then(setImageOverrides)
+      .catch((err) => console.error('Error loading site images:', err));
+  }, []);
+
+  useEffect(() => {
+    if (location.hash === '#faqs') {
+      const timer = setTimeout(() => {
+        document.getElementById('faqs')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [location.hash]);
 
   const handleOpenModal = (serviceTitle) => {
     setSelectedService(serviceTitle);
@@ -27,51 +40,13 @@ const Services = () => {
     setSelectedService(null);
   };
 
-  const services = [
-    {
-      icon: <FiShield className="w-7 h-7" />,
-      title: "Home-Based Detox Program",
-      description: "Discreet, medically-supervised detoxification in the comfort and privacy of your home.",
-      details: "A premium service offering 24/7 professional support, medical monitoring, and a personalized recovery plan. Designed for individuals requiring absolute privacy and convenience while managing withdrawal safely.",
-      highlight: true
-    },
-    {
-      icon: <FiHome className="w-7 h-7" />,
-      title: "Inpatient Rehabilitation",
-      description: "Comprehensive residential treatment for severe mental health conditions in a supportive environment.",
-      details: "Our inpatient program provides 24/7 care with a multidisciplinary team including psychiatrists, psychologists, nurses, and therapists. Patients receive personalized treatment plans, medication management, group therapy, and life skills training."
-    },
-    {
-      icon: <FiUsers className="w-7 h-7" />,
-      title: "Psychological Counseling",
-      description: "Individual and group therapy sessions to address emotional and behavioral challenges.",
-      details: "We offer evidence-based therapies including CBT, DBT, and trauma-focused therapy. Our counselors specialize in depression, anxiety, PTSD, relationship issues, and more. Both in-person and telehealth options available."
-    },
-    {
-      icon: <FiBriefcase className="w-7 h-7" />,
-      title: "Occupational Therapy",
-      description: "Therapy focused on improving daily living skills and functional abilities.",
-      details: "Our occupational therapists help clients develop or regain skills needed for daily living and work. This includes cognitive rehabilitation, stress management techniques, and adaptive strategies for mental health challenges."
-    },
-    {
-      icon: <FiHeart className="w-7 h-7" />,
-      title: "Wellness Programs",
-      description: "Holistic approaches to enhance overall mental and physical well-being.",
-      details: "Our wellness programs include mindfulness meditation, yoga therapy, nutrition counseling, art therapy, and stress reduction workshops. Designed to promote resilience and prevent burnout."
-    },
-    {
-      icon: <FiZap className="w-7 h-7" />,
-      title: "Neuropsychological Assessments",
-      description: "Evaluations to assess cognitive functions and identify neurological issues.",
-      details: "Comprehensive assessments for memory, attention, executive functioning, and more. Used to diagnose conditions like ADHD, dementia, traumatic brain injuries, and learning disabilities."
-    },
-    {
-      icon: <FiUserCheck className="w-7 h-7" />,
-      title: "Corporate Wellness & CSR",
-      description: "Strategic wellness solutions aligning employee health with Corporate Social Responsibility goals.",
-      details: "Our programs go beyond basic compliance, fostering a culture of holistic well-being. Services include CSR-aligned mental health initiatives, executive coaching, stress management workshops, and comprehensive Employee Assistance Programs (EAPs) that drive productivity and social impact."
+  const handleLearnMore = (service) => {
+    if (service.gallery && service.gallery.length > 0) {
+      navigate(`/services/${service.key}`);
+    } else {
+      handleOpenModal(service.title);
     }
-  ];
+  };
 
   return (
     <div className="px-4 md:px-10 lg:px-20 flex flex-1 justify-center py-5 bg-[var(--light-bg)]">
@@ -104,6 +79,7 @@ const Services = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
+            decoding="async"
           />
         </div>
 
@@ -115,44 +91,58 @@ const Services = () => {
           mental wellness and improved quality of life.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {services.map((service, index) => (
-            <motion.div
-              key={index}
-              className={`service-card bg-[var(--card-bg)] border rounded-xl p-6 ${service.highlight ? 'border-2 border-[var(--primary)] ring-4 ring-[var(--primary)]/10' : 'border-[var(--border-color)]'}`}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{
-                y: -5,
-                boxShadow: "0 10px 30px rgba(13, 148, 136, 0.2)"
-              }}
-            >
-              {service.highlight && (
-                <div className="mb-2 inline-block px-3 py-1 bg-[var(--primary)] text-white text-xs font-bold uppercase rounded-full">
-                  Recommended
-                </div>
-              )}
-              <div className="service-icon mb-3">
-                {service.icon}
-              </div>
-              <div className="service-content">
-                <h2 className="service-title text-[var(--text-primary)] font-semibold">{service.title}</h2>
-                <p className="service-description mb-3 text-[var(--text-secondary)]">{service.description}</p>
-                <p className="text-[var(--text-secondary)] text-sm">{service.details}</p>
-              </div>
-              <button
-                onClick={() => handleOpenModal(service.title)}
-                className="btn-primary mt-4 w-full block text-center"
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 mb-12">
+          {services.map((service, index) => {
+            const Icon = service.icon;
+            return (
+              <motion.div
+                key={service.key}
+                className={`relative flex flex-col rounded-2xl bg-[var(--card-bg)] border transition-shadow duration-300 hover:shadow-[var(--shadow-hover)] ${
+                  service.highlight ? 'border-2 border-[var(--primary)] ring-4 ring-[var(--primary)]/10' : 'border-[var(--border-color)]'
+                }`}
+                style={{ boxShadow: 'var(--shadow-light)' }}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <span>Learn More</span>
-              </button>
-            </motion.div>
-          ))}
+                <div className="relative">
+                  <img
+                    src={imageOverrides[service.key] || service.image}
+                    alt={service.title}
+                    className="w-full h-48 object-cover object-top rounded-t-2xl"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  {service.highlight && (
+                    <span className="absolute top-3 left-3 px-3 py-1 bg-[var(--primary)] text-white text-xs font-bold uppercase rounded-full shadow-md">
+                      Recommended
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex-1 flex flex-col items-center text-center px-6 pb-6">
+                  <div className="service-icon -mt-7 mb-4 relative z-10">
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <h2 className="service-title text-[var(--text-primary)] font-semibold">{service.title}</h2>
+                  <p className="service-description mb-3 text-[var(--text-secondary)]">{service.description}</p>
+                  <p className="text-[var(--text-secondary)] text-sm">{service.details}</p>
+                  <button
+                    onClick={() => handleLearnMore(service)}
+                    className="btn-primary mt-4 w-full block text-center"
+                  >
+                    <span>Learn More</span>
+                  </button>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* FAQ Section */}
-        <SectionTitle>Frequently Asked Questions</SectionTitle>
+        <div id="faqs" className="scroll-mt-28">
+          <SectionTitle>Frequently Asked Questions</SectionTitle>
+        </div>
         <div className="mb-12">
           {[
             {

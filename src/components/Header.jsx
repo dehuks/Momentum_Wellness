@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiMenu, FiX } from 'react-icons/fi';
-import logo from '../assets/mowet_logo.png';
+import { FiMenu, FiX, FiChevronDown } from 'react-icons/fi';
+import logo from '../assets/mowet_logo.png?format=webp';
 import AppointmentModal from '../AppointmentModal';
 
 const navItems = [
   { name: 'Home', path: '/' },
   { name: 'About Us', path: '/about' },
-  { name: 'Services', path: '/services' },
+  {
+    name: 'Services',
+    path: '/services',
+    children: [
+      { name: 'Our Services', path: '/services' },
+      { name: 'FAQs', path: '/services#faqs' },
+    ],
+  },
   { name: 'Careers', path: '/careers' },
-  { name: 'Blog', path: 'https://mowet.co.ke/blog', external: true },
+  { name: 'Blog', path: '/blog' },
   { name: 'Contact', path: '/contact' },
 ];
 
@@ -35,8 +42,19 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const closeTimeoutRef = useRef(null);
 
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+
+  const handleDropdownEnter = (name) => {
+    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    setOpenDropdown(name);
+  };
+
+  const handleDropdownLeave = () => {
+    closeTimeoutRef.current = setTimeout(() => setOpenDropdown(null), 150);
+  };
 
   const handleBookAppointmentClick = () => {
     setIsBookingModalOpen(true);
@@ -87,6 +105,7 @@ const Header = () => {
               src={logo}
               alt="Mowet Kenya Logo"
               className="h-10 w-auto transition-opacity duration-200 group-hover:opacity-85"
+              decoding="async"
             />
             <div className="flex flex-col leading-tight">
               <span className="text-[var(--text-primary)] text-base font-bold tracking-tight">
@@ -100,7 +119,7 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            {navItems.map(({ name, path, external }) =>
+            {navItems.map(({ name, path, external, children }) =>
               external ? (
                 <a
                   key={name}
@@ -112,6 +131,67 @@ const Header = () => {
                   {name}
                   <span className="absolute -bottom-0.5 left-0 h-[2px] w-0 rounded-full bg-[var(--primary)] transition-all duration-300 group-hover:w-full" />
                 </a>
+              ) : children ? (
+                <div
+                  key={name}
+                  className="relative"
+                  onMouseEnter={() => handleDropdownEnter(name)}
+                  onMouseLeave={handleDropdownLeave}
+                >
+                  <NavLink
+                    to={path}
+                    className="relative flex items-center gap-1 text-sm font-medium transition-colors duration-200 group pb-1"
+                  >
+                    {({ isActive }) => (
+                      <>
+                        <span
+                          className={
+                            isActive
+                              ? 'text-[var(--primary)] font-semibold'
+                              : 'text-[var(--text-secondary)] group-hover:text-[var(--primary)]'
+                          }
+                        >
+                          {name}
+                        </span>
+                        <FiChevronDown
+                          className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                            openDropdown === name ? 'rotate-180' : ''
+                          } ${isActive ? 'text-[var(--primary)]' : 'text-[var(--text-secondary)] group-hover:text-[var(--primary)]'}`}
+                        />
+                        <span
+                          className={`absolute -bottom-0.5 left-0 h-[2px] rounded-full bg-[var(--primary)] transition-all duration-300 ${
+                            isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                          }`}
+                        />
+                      </>
+                    )}
+                  </NavLink>
+
+                  <AnimatePresence>
+                    {openDropdown === name && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute left-0 top-full pt-3 min-w-[180px]"
+                      >
+                        <div className="rounded-xl overflow-hidden border border-[var(--border-color)] bg-white shadow-[0_10px_30px_rgba(13,148,136,0.15)] py-2">
+                          {children.map((child) => (
+                            <NavLink
+                              key={child.name}
+                              to={child.path}
+                              onClick={() => setOpenDropdown(null)}
+                              className="block px-4 py-2 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--gradient-accent)] transition-colors"
+                            >
+                              {child.name}
+                            </NavLink>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               ) : (
                 <NavLink
                   key={name}
@@ -187,7 +267,7 @@ const Header = () => {
             <div className="relative z-10 flex flex-col items-center justify-center h-full px-6">
               <div className="flex flex-col items-center gap-6 text-center max-w-sm w-full">
 
-                {navItems.map(({ name, path, external }) => (
+                {navItems.map(({ name, path, external, children }) => (
                   <motion.div key={name} variants={itemVariants} className="w-full">
                     {external ? (
                       <a
@@ -214,6 +294,20 @@ const Header = () => {
                       >
                         {name}
                       </NavLink>
+                    )}
+                    {children && (
+                      <div className="flex flex-col items-center gap-1 mt-1">
+                        {children.map((child) => (
+                          <NavLink
+                            key={child.name}
+                            to={child.path}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="block text-base font-medium text-[var(--text-secondary)] hover:text-[var(--primary)] transition-colors py-1.5 px-4 rounded-lg"
+                          >
+                            {child.name}
+                          </NavLink>
+                        ))}
+                      </div>
                     )}
                   </motion.div>
                 ))}
