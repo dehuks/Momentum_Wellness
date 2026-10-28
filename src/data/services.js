@@ -14,15 +14,12 @@ import occupationalTherapyImg from '../assets/services/occupational-therapy.jpg?
 import wellnessProgramsImg from '../assets/services/wellness-programs.jpg?format=webp';
 import neuropsychAssessmentImg from '../assets/services/neuropsych-assessment.jpg?format=webp';
 import csrHandshakeImg from '../assets/services/csr-handshake.jpg?format=webp';
-import csrGroupImg from '../assets/services/csr-gorup-1.jpg?format=webp';
-import csrHandshake2Img from '../assets/services/csr-handshake-2.jpg?format=webp';
 
 export const services = [
   {
     key: 'service-corporate-wellness',
     icon: FiUserCheck,
     image: csrHandshakeImg,
-    gallery: [csrGroupImg, csrHandshake2Img],
     title: "Corporate Wellness & CSR",
     description: "Strategic wellness solutions aligning employee health with Corporate Social Responsibility goals.",
     details: "Our programs go beyond basic compliance, fostering a culture of holistic well-being. Services include CSR-aligned mental health initiatives, executive coaching, stress management workshops, and comprehensive Employee Assistance Programs (EAPs) that drive productivity and social impact."

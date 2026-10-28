@@ -1,22 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FiCheckCircle, FiAlertTriangle, FiRefreshCw, FiArrowLeft } from 'react-icons/fi';
-import { Link, useLocation } from 'react-router-dom';
-import { sendEmail, formatAssessmentResult } from '../utils/emailService';
+import { Link } from 'react-router-dom';
+import AssessmentFollowUp from '../components/AssessmentFollowUp';
 
 const Phq9Questionnaire = () => {
     const [answers, setAnswers] = useState({});
     const [result, setResult] = useState(null);
-    const [emailStatus, setEmailStatus] = useState(null);
     const topRef = useRef(null);
-    const location = useLocation();
-    const contactData = location.state?.contactData;
 
+    // Scroll after the result (or reset form) has rendered: scrolling inside the click
+    // handler ran before the page shrank, and phones cancelled the half-finished scroll.
     useEffect(() => {
-        if (topRef.current) {
-            topRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    }, []);
+        topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, [result]);
 
     const questions = [
         { id: 1, text: "Little interest or pleasure in doing things" },
@@ -41,7 +38,7 @@ const Phq9Questionnaire = () => {
         setAnswers(prev => ({ ...prev, [questionId]: value }));
     };
 
-    const calculateScore = async () => {
+    const calculateScore = () => {
         let score = 0;
         Object.values(answers).forEach(val => score += val);
 
@@ -65,39 +62,13 @@ const Phq9Questionnaire = () => {
             colorClass = "text-red-600";
         }
 
-        setResult({ score, interpretation, colorClass });
-
-        if (contactData) {
-            setEmailStatus('sending');
-            const message = formatAssessmentResult("Depression (PHQ-9)", score, interpretation);
-
-            try {
-                await sendEmail({
-                    name: contactData.name,
-                    email: contactData.contact.includes('@') ? contactData.contact : 'Not provided',
-                    phone: contactData.contact,
-                    message: message,
-                    title: "PHQ-9 Assessment Result"
-                });
-                setEmailStatus('sent');
-            } catch (error) {
-                console.error("Failed to send email", error);
-                setEmailStatus('error');
-            }
-        }
-
-        if (topRef.current) {
-            topRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
+        // Question 9 asks about thoughts of self-harm; any answer above "Not at all" needs urgent signposting
+        setResult({ score, interpretation, colorClass, selfHarmRisk: answers[9] > 0 });
     };
 
     const resetTest = () => {
         setAnswers({});
         setResult(null);
-        setEmailStatus(null);
-        if (topRef.current) {
-            topRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
     };
 
     const isComplete = questions.every(q => answers[q.id] !== undefined);
@@ -179,15 +150,16 @@ const Phq9Questionnaire = () => {
                                     </div>
                                 </div>
 
-                                {emailStatus === 'sending' && (
-                                    <p className="text-blue-500 mb-4 animate-pulse">Sending results...</p>
-                                )}
-                                {emailStatus === 'sent' && (
-                                    <p className="text-green-600 mb-4 font-bold">Results sent successfully!</p>
-                                )}
-                                {emailStatus === 'error' && (
-                                    <p className="text-red-500 mb-4">Could not send results automatically.</p>
-                                )}
+                                <div className="mb-8">
+                                    <AssessmentFollowUp
+                                        testName="Depression (PHQ-9)"
+                                        emailTitle="PHQ-9 Assessment"
+                                        scoreData={result.score}
+                                        interpretation={result.interpretation}
+                                        concerning={result.score >= 10}
+                                        urgent={result.selfHarmRisk}
+                                    />
+                                </div>
 
                                 <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-8 text-left text-sm text-blue-900 mx-auto max-w-2xl">
                                     <div className="flex items-start">

@@ -2,11 +2,15 @@
 
 /* Custom CSS Variables — brand-aligned teal palette */
 :root {
-  --primary: #0D9488;          /* teal-600 — matches logo, warm clinical teal */
+  --primary: #0D9488;          /* teal-600 — logo hue, dark enough for white text */
   --primary-hover: #0F766E;    /* teal-700 — deeper on hover */
-  --accent: #2DD4BF;           /* teal-400 — lighter accent */
+  --accent: #40E0D0;           /* logo turquoise — decorative only, too light for text */
   --accent-hover: #14B8A6;     /* teal-500 */
 
+  /* Logo gold — warmth against the cool teal; use sparingly */
+  --gold: #D4AF37;             /* decorative: rules, stars, icons */
+  --gold-text: #8C6E00;        /* readable on white (matches the logo motto) */
+  --gold-soft: #FBF6E4;        /* tinted backgrounds */
   --light-bg: #F8FAFC;
   --card-bg: #FFFFFF;
   --border-color: #E2E8F0;
@@ -18,6 +22,8 @@
   --gradient-primary: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%);
   --gradient-accent: linear-gradient(135deg, #F0FDFA 0%, #CCFBF1 100%);
   --gradient-light: linear-gradient(135deg, #F8FAFC 0%, #F0FDFA 100%);
+  --gradient-hero: linear-gradient(135deg, #F8FAFC 0%, #F0FDFA 50%, #FDFBF3 100%);
+  --gradient-brand-rule: linear-gradient(90deg, var(--accent) 0%, var(--gold) 100%);
 
   --shadow-primary: 0 4px 15px rgba(13, 148, 136, 0.28);
   --shadow-accent: 0 4px 15px rgba(45, 212, 191, 0.2);
@@ -100,7 +106,7 @@
   gap: 2rem;
   padding: 4rem 1rem;
   text-align: center;
-  background: radial-gradient(ellipse at center, rgba(96, 165, 250, 0.05) 0%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(64, 224, 208, 0.06) 0%, transparent 70%);
 }
 
 .hero-content {
@@ -140,12 +146,18 @@
   position: relative;
 }
 
+/* A page's own top heading: the page container already provides the space above it,
+   so drop the large margin meant for separating sections further down the page */
+.section-title.page-title {
+  margin-top: 0;
+}
+
 .section-title::after {
   content: '';
   display: block;
   width: 48px;
   height: 3px;
-  background: var(--gradient-primary);
+  background: var(--gradient-brand-rule);
   margin: 0.75rem auto 0;
   border-radius: 2px;
 }
@@ -513,7 +525,6 @@ body {
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
 }
-
 /* Scrollbar Styles */
 ::-webkit-scrollbar {
   width: 8px;

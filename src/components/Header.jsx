@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMenu, FiX, FiChevronDown } from 'react-icons/fi';
-import logo from '../assets/mowet_logo.png?format=webp';
-import AppointmentModal from '../AppointmentModal';
+import logo from '../assets/mowet_logo.png?format=webp';import AppointmentModal from '../AppointmentModal';
 
 const navItems = [
   { name: 'Home', path: '/' },
@@ -100,21 +99,13 @@ const Header = () => {
         <div className="px-4 md:px-10 py-3.5 flex items-center justify-between">
 
           {/* Logo */}
-          <NavLink to="/" className="flex items-center gap-3 group">
+          <NavLink to="/" className="flex items-center group">
             <img
               src={logo}
-              alt="Mowet Kenya Logo"
-              className="h-10 w-auto transition-opacity duration-200 group-hover:opacity-85"
+              alt="Mowet Kenya – Compassionate Recovery"
+              className="h-20 w-auto transition-opacity duration-200 group-hover:opacity-85"
               decoding="async"
             />
-            <div className="flex flex-col leading-tight">
-              <span className="text-[var(--text-primary)] text-base font-bold tracking-tight">
-                MOWET Kenya
-              </span>
-              <span className="text-[10px] font-medium tracking-widest text-[var(--primary)] uppercase">
-                Momentum Wellness
-              </span>
-            </div>
           </NavLink>
 
           {/* Desktop Navigation */}

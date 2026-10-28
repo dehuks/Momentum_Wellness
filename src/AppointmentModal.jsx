@@ -82,7 +82,7 @@ const AppointmentModal = ({ isOpen, onClose, serviceName }) => {
                     {/* Option 1: WhatsApp */}
                     <WhatsAppButton
                       className="btn-primary w-full py-3 text-base"
-                      message={`Hello! I'm interested in ${serviceName ? `booking for ${serviceName}` : 'booking an appointment'} with MOWET Kenya.`}
+                      message={`Hello! I'm interested in ${serviceName ? `booking for ${serviceName}` : 'booking an appointment'} with Mowet Kenya.`}
                       onClick={handleClose} // Close modal after selection
                     >
                       Book via WhatsApp

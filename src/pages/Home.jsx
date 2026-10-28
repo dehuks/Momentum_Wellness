@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { FiHome, FiUsers, FiHeart, FiBriefcase, FiAlertTriangle, FiX } from 'react-icons/fi';
+import { FiHome, FiUsers, FiHeart, FiBriefcase, FiAlertTriangle, FiX, FiActivity, FiCloudDrizzle, FiWind, FiBattery, FiArrowRight, FiLock } from 'react-icons/fi';
 import { Link } from "react-router-dom";
 import { WhatsAppFloat } from './WhatsappConfig'; // removed WhatsAppButton import
 import AppointmentModal from '../AppointmentModal'; // Imported Modal
@@ -117,7 +117,7 @@ const SupportCauseModal = ({ isOpen, onClose }) => {
       amount: Math.round(parseFloat(amount) * 100), // Paystack uses smallest currency unit
       currency: 'KES',
       ref: `mowet_${Date.now()}`,
-      metadata: { purpose: 'Support Our Cause - Momentum Wellness' },
+      metadata: { purpose: 'Support Our Cause - Mowet Kenya' },
       onSuccess: async (transaction) => {
         setLoading(true);
         setFeedback('Verifying payment...');
@@ -134,7 +134,7 @@ const SupportCauseModal = ({ isOpen, onClose }) => {
             setFeedback('Payment received but verification pending. Contact us if you need confirmation.');
           }
         } catch {
-          setFeedback('✓ Payment successful! Thank you for supporting Momentum Wellness.');
+          setFeedback('✓ Payment successful! Thank you for supporting Mowet Kenya.');
         } finally {
           setLoading(false);
         }
@@ -322,7 +322,7 @@ const ImageCarousel = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-96 overflow-hidden rounded-2xl shadow-2xl">
+    <div className="relative w-full h-56 sm:h-72 md:h-96 overflow-hidden rounded-2xl shadow-2xl">
       <div
         className="flex transition-transform duration-700 ease-in-out h-full"
         style={{ transform: `translateX(-${currentImage * 100}%)` }}
@@ -385,19 +385,19 @@ const ImageCarousel = () => {
 };
 
 // ➡️ Updated Hero Component: Accepts prop to open appointment modal
-const Hero = ({ onBookAppointment }) => (
+const Hero = ({ onBookAppointment, ctaRef }) => (
   <div className="hero-section">
     <div className="hero-content">
       <div className="hero-decoration" />
 
-      <div className="flex flex-col items-center gap-12 max-w-7xl mx-auto relative z-10">
+      <div className="flex flex-col items-center gap-8 md:gap-12 max-w-7xl mx-auto relative z-10">
         <div className="text-center max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="hero-title mb-6">
+            <h1 className="hero-title mb-4 md:mb-6">
               Empowering Minds,
               <br />
               <span className="hero-title-accent">Embracing Wellness</span>
@@ -405,7 +405,7 @@ const Hero = ({ onBookAppointment }) => (
           </motion.div>
 
           <motion.p
-            className="hero-subtitle mb-8"
+            className="hero-subtitle"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -414,7 +414,8 @@ const Hero = ({ onBookAppointment }) => (
           </motion.p>
 
           <motion.div
-            className="flex flex-col sm:flex-row gap-6 justify-center mb-12"
+            ref={ctaRef}
+            className="flex flex-col sm:flex-row gap-3 sm:gap-6 justify-center md:mb-12"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -443,21 +444,21 @@ const Hero = ({ onBookAppointment }) => (
         </motion.div>
 
         <motion.div
-          className="flex flex-wrap justify-center items-center gap-8 text-sm text-gray-500 mt-8"
+          className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 md:gap-8 text-sm text-gray-500 md:mt-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.8 }}
         >
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <div className="w-2 h-2 bg-[var(--primary)] rounded-full"></div>
             <span>Licensed Professionals</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+            <div className="w-2 h-2 bg-[var(--gold)] rounded-full"></div>
             <span>Evidence-Based Care</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+            <div className="w-2 h-2 bg-[var(--primary)] rounded-full"></div>
             <span>Confidential & Safe</span>
           </div>
         </motion.div>
@@ -470,8 +471,8 @@ const SectionTitle = ({ children }) => (
   <h2 className="section-title">{children}</h2>
 );
 
-const ServiceCard = ({ icon, title, description }) => (
-  <div className="service-card">
+const ServiceCard = ({ serviceKey, icon, title, description }) => (
+  <Link to={`/services/${serviceKey}`} className="service-card h-full group">
     <div className="service-icon">
       {React.cloneElement(icon, {
         className: "w-7 h-7",
@@ -479,38 +480,95 @@ const ServiceCard = ({ icon, title, description }) => (
     </div>
     <h3 className="service-title">{title}</h3>
     <p className="service-description">{description}</p>
-  </div>
+    <span className="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-[var(--primary)]">
+      Learn more
+      <FiArrowRight className="transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true" />
+    </span>
+  </Link>
+);
+
+const SelfCheckCard = ({ icon, title, description, onStart }) => (
+  <button type="button" onClick={onStart} className="self-check-card group">
+    <div className="self-check-icon">
+      {React.cloneElement(icon, { className: "w-6 h-6", "aria-hidden": true })}
+    </div>
+    <h3 className="text-lg font-semibold text-[#134E4A]">{title}</h3>
+    <p className="text-sm leading-relaxed text-[var(--text-secondary)]">{description}</p>
+    <span className="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-[var(--gold-text)]">
+      Start self-check
+      <FiArrowRight className="transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true" />
+    </span>
+  </button>
 );
 
 const Home = () => {
   // ➡️ State for CAGE Modal
   const [isAssessmentModalOpen, setIsAssessmentModalOpen] = useState(false);
+  const [assessmentTestId, setAssessmentTestId] = useState(null);
+  const heroCtaRef = useRef(null);
+  const openAssessment = (testId = null) => {
+    setAssessmentTestId(testId);
+    setIsAssessmentModalOpen(true);
+  };
   // ➡️ State for Appointment Modal
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
   // ➡️ State for Support Cause Modal
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
 
 
+  // Keys match src/data/services.js so each card opens its detail page
   const services = [
     {
+      key: 'service-inpatient-rehab',
       icon: <FiHome />,
       title: 'Inpatient Rehabilitation',
       description: 'Comprehensive care in a supportive environment.',
     },
     {
+      key: 'service-counseling',
       icon: <FiUsers />,
       title: 'Counseling',
       description: 'Individual and group therapy sessions.',
     },
     {
+      key: 'service-wellness-programs',
       icon: <FiHeart />,
       title: 'Wellness Programs',
       description: 'Holistic approaches to enhance well-being.',
     },
     {
+      key: 'service-corporate-wellness',
       icon: <FiBriefcase />,
       title: 'Corporate Wellness',
       description: 'Mental health solutions for your workplace.',
+    },
+  ];
+
+  // Ids match AssessmentModal's tests
+  const selfChecks = [
+    {
+      id: 'cage',
+      icon: <FiActivity />,
+      title: 'Alcohol Use',
+      description: 'A short screen for signs that drinking may be becoming a problem.',
+    },
+    {
+      id: 'phq9',
+      icon: <FiCloudDrizzle />,
+      title: 'Depression',
+      description: 'Check in on your mood, sleep, energy and interest over the last two weeks.',
+    },
+    {
+      id: 'anxiety',
+      icon: <FiWind />,
+      title: 'Anxiety',
+      description: 'See how often worry, tension and physical symptoms are affecting you.',
+    },
+    {
+      id: 'burnout',
+      icon: <FiBattery />,
+      title: 'Burnout',
+      description: 'Gauge exhaustion and detachment linked to work or caregiving.',
     },
   ];
 
@@ -519,7 +577,7 @@ const Home = () => {
       name: 'Sarah M.',
       location: 'Nairobi, Kenya',
       content:
-        'The team at Momentum Wellness helped me through a difficult time in my life. Their compassionate approach made all the difference.',
+        'The team at Mowet Kenya helped me through a difficult time in my life. Their compassionate approach made all the difference.',
       initials: 'SM',
     },
     {
@@ -546,12 +604,13 @@ const Home = () => {
       />
 
       {/* Floating WhatsApp Button */}
-      <WhatsAppFloat />
+      <WhatsAppFloat avoidRef={heroCtaRef} />
 
       {/* ➡️ Assessment Modal Integration */}
       <AssessmentModal
         isOpen={isAssessmentModalOpen}
         onClose={() => setIsAssessmentModalOpen(false)}
+        initialTestId={assessmentTestId}
       />
 
       {/* ➡️ Appointment Modal Integration */}
@@ -564,19 +623,47 @@ const Home = () => {
         <div className="layout-content-container flex flex-col max-w-6xl w-full">
 
           {/* Passed the handler to Hero */}
-          <Hero onBookAppointment={() => setIsAppointmentModalOpen(true)} />
+          <Hero onBookAppointment={() => setIsAppointmentModalOpen(true)} ctaRef={heroCtaRef} />
+
+          <SectionTitle>Not Sure Where to Start?</SectionTitle>
+          <p className="text-center text-lg text-[var(--text-secondary)] max-w-2xl mx-auto -mt-2 mb-8">
+            Take a free self-check. It only takes a few minutes and can help you understand what you're going through.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {selfChecks.map((check, index) => (
+              <motion.div
+                key={check.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+              >
+                <SelfCheckCard
+                  icon={check.icon}
+                  title={check.title}
+                  description={check.description}
+                  onStart={() => openAssessment(check.id)}
+                />
+              </motion.div>
+            ))}
+          </div>
+          <p className="flex items-center justify-center gap-2 text-center text-sm text-[var(--text-secondary)] mt-6">
+            <FiLock className="shrink-0 text-[var(--primary)]" aria-hidden="true" />
+            Confidential screening tools, not a diagnosis. Discuss your results with a professional.
+          </p>
 
           <SectionTitle>Our Services</SectionTitle>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service, index) => (
               <motion.div
-                key={index}
+                key={service.key}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
               >
                 <ServiceCard
+                  serviceKey={service.key}
                   icon={service.icon}
                   title={service.title}
                   description={service.description}
@@ -604,7 +691,7 @@ const Home = () => {
                   </div>
                 </div>
                 <p className="testimonial-content">"{t.content}"</p>
-                <div className="flex text-yellow-500 mt-3" aria-label="5 star rating">
+                <div className="flex text-[var(--gold)] mt-3" aria-label="5 star rating">
                   {[...Array(5)].map((_, i) => (
                     <svg
                       key={i}
@@ -638,7 +725,7 @@ const Home = () => {
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <button
-                  onClick={() => setIsAssessmentModalOpen(true)}
+                  onClick={() => openAssessment()}
                   className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-white text-gray-900 rounded-lg shadow-xl hover:bg-gray-100 transition-all duration-300 border-2 border-white"
                   style={{ textShadow: 'none' }}
                 >
@@ -666,26 +753,7 @@ const Home = () => {
         </div>
 
         <style jsx>{`
-          /* Colour tokens — aligned with index.css */
-          :root {
-            --primary: #0D9488;
-            --primary-hover: #0F766E;
-            --accent: #2DD4BF;
-            --accent-hover: #14B8A6;
-            --light-bg: #F8FAFC;
-            --card-bg: #FFFFFF;
-            --border-color: #E2E8F0;
-            --border-secondary: #CBD5E1;
-            --text-primary: #1E293B;
-            --text-secondary: #64748B;
-            --gradient-primary: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%);
-            --gradient-accent: linear-gradient(135deg, #F0FDFA 0%, #CCFBF1 100%);
-            --gradient-hero: linear-gradient(135deg, #F8FAFC 0%, #F0FDFA 50%, #F8FAFC 100%);
-            --shadow-primary: 0 4px 15px rgba(13, 148, 136, 0.28);
-            --shadow-accent: 0 4px 15px rgba(45, 212, 191, 0.2);
-            --shadow-hover: 0 20px 40px rgba(13, 148, 136, 0.2);
-            --shadow-light: 0 2px 8px rgba(15, 23, 42, 0.07);
-          }
+          /* Colour tokens live in index.css */
 
           .btn-primary {
             display: inline-flex;
@@ -767,13 +835,14 @@ const Home = () => {
             border-radius: 1.25rem;
           }
 
+          /* Mobile-first: on phones the hero hugs its content so visitors reach the
+             page's substance quickly; the tall, roomy hero returns from 768px up */
           .hero-section {
             position: relative;
-            min-height: 90vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem 1rem;
+            padding: 1.5rem 0.25rem 2rem;
             background: var(--gradient-hero);
             overflow: hidden;
           }
@@ -785,9 +854,9 @@ const Home = () => {
             right: 0;
             bottom: 0;
             background: 
-              radial-gradient(ellipse at top left, rgba(96, 165, 250, 0.1) 0%, transparent 50%),
-              radial-gradient(ellipse at bottom right, rgba(167, 139, 250, 0.1) 0%, transparent 50%),
-              radial-gradient(ellipse at center, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+              radial-gradient(ellipse at top left, rgba(64, 224, 208, 0.12) 0%, transparent 50%),
+              radial-gradient(ellipse at bottom right, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at center, rgba(64, 224, 208, 0.05) 0%, transparent 70%);
             pointer-events: none;
           }
 
@@ -798,11 +867,12 @@ const Home = () => {
           }
 
           .hero-title {
-            font-size: 3rem;
+            font-size: 2.25rem;
             font-weight: 800;
             line-height: 1.1;
             letter-spacing: -0.02em;
             color: #134E4A;
+            overflow-wrap: break-word;
           }
 
           .hero-title-accent {
@@ -813,12 +883,12 @@ const Home = () => {
           }
 
           .hero-subtitle {
-            font-size: 1.25rem;
+            font-size: 1.0625rem;
             font-weight: 400;
-            line-height: 1.7;
+            line-height: 1.6;
             color: var(--text-secondary);
             max-width: 48rem;
-            margin: 0 auto;
+            margin: 0 auto 1.5rem;
           }
 
           .section-title {
@@ -838,7 +908,7 @@ const Home = () => {
             display: block;
             width: 48px;
             height: 3px;
-            background: var(--gradient-primary);
+            background: var(--gradient-brand-rule);
             margin: 0.75rem auto 0;
             border-radius: 2px;
           }
@@ -919,6 +989,46 @@ const Home = () => {
             color: var(--text-secondary);
           }
 
+          .self-check-card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+            width: 100%;
+            height: 100%;
+            padding: 1.75rem 1.5rem;
+            text-align: left;
+            border-radius: 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-light);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+          }
+
+          .self-check-card:hover,
+          .self-check-card:focus-visible {
+            transform: translateY(-4px);
+            border-color: var(--gold);
+            box-shadow: 0 12px 28px rgba(140, 110, 0, 0.12);
+          }
+
+          .self-check-card:focus-visible {
+            outline: 2px solid var(--gold-text);
+            outline-offset: 2px;
+          }
+
+          .self-check-icon {
+            display: flex;
+            height: 3rem;
+            width: 3rem;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.875rem;
+            background: var(--gold-soft);
+            color: var(--gold-text);
+          }
+
           .testimonial-card {
             display: flex;
             flex-direction: column;
@@ -991,11 +1101,17 @@ const Home = () => {
           }
 
           @media (min-width: 768px) {
+            .hero-section {
+              min-height: 90vh;
+              padding: 2rem 1rem;
+            }
             .hero-title {
               font-size: 4rem;
             }
             .hero-subtitle {
               font-size: 1.375rem;
+              line-height: 1.7;
+              margin-bottom: 2rem;
             }
             .section-title {
               font-size: 2.5rem;

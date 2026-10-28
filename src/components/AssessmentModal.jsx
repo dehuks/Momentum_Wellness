@@ -1,45 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiX, FiUser, FiActivity, FiAlertCircle } from 'react-icons/fi';
+import { FiX, FiUser, FiActivity, FiAlertCircle, FiLock } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
-const AssessmentModal = ({ isOpen, onClose }) => {
+const tests = [
+    { id: 'cage', name: 'Alcohol Use (CAGE)', route: '/cage', icon: <FiActivity /> },
+    { id: 'phq9', name: 'Depression (PHQ-9)', route: '/phq9', icon: <FiAlertCircle /> },
+    { id: 'anxiety', name: 'Anxiety (Beck\'s Inventory)', route: '/anxiety', icon: <FiUser /> },
+    { id: 'burnout', name: 'Burnout (Maslach\'s Inventory)', route: '/burnout', icon: <FiUser /> },
+];
+
+// Anonymous by default: no details are asked for here. People can choose to
+// request a call back after seeing their result (see AssessmentFollowUp).
+// initialTestId (optional) preselects a test so the user skips the selection step.
+const AssessmentModal = ({ isOpen, onClose, initialTestId = null }) => {
     const navigate = useNavigate();
-    const [step, setStep] = useState(1); // 1: Contact, 2: Selection, 3: Consent
-    const [contactData, setContactData] = useState({ name: '', contact: '' });
+    const [step, setStep] = useState(1); // 1: Selection, 2: Consent
     const [selectedTest, setSelectedTest] = useState(null);
 
-    const tests = [
-        { id: 'cage', name: 'Alcohol Use (CAGE)', route: '/cage', icon: <FiActivity /> },
-        { id: 'phq9', name: 'Depression (PHQ-9)', route: '/phq9', icon: <FiAlertCircle /> },
-        { id: 'anxiety', name: 'Anxiety (Beck\'s Inventory)', route: '/anxiety', icon: <FiUser /> },
-        { id: 'burnout', name: 'Burnout (Maslach\'s Inventory)', route: '/burnout', icon: <FiUser /> },
-    ];
-
-    const handleContactSubmit = (e) => {
-        e.preventDefault();
-        if (contactData.name && contactData.contact) {
-            setStep(2);
-        }
-    };
+    // Start each opening fresh, with the requested test (if any) already chosen
+    useEffect(() => {
+        if (!isOpen) return;
+        const preset = tests.find((t) => t.id === initialTestId) || null;
+        setSelectedTest(preset);
+        setStep(preset ? 2 : 1);
+    }, [isOpen, initialTestId]);
 
     const handleTestSelect = (test) => {
         setSelectedTest(test);
-        setStep(3);
+        setStep(2);
     };
 
     const handleConsent = () => {
-        // Here you could log the contactData if a backend was available
-        console.log("User Contact:", contactData);
-        console.log("Selected Test:", selectedTest);
-
         onClose();
-        onClose();
-        navigate(selectedTest.route, { state: { contactData } });
-        // Reset for next time
-        setStep(1);
-        setContactData({ name: '', contact: '' });
-        setSelectedTest(null);
+        navigate(selectedTest.route);
     };
 
     const ModalBackdrop = {
@@ -79,91 +73,50 @@ const AssessmentModal = ({ isOpen, onClose }) => {
                         {/* Content */}
                         <div className="p-6">
                             {step === 1 && (
-                                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-                                    <h4 className="text-xl font-bold mb-2 text-[var(--text-primary)]">Let's get started</h4>
-                                    <p className="text-[var(--text-secondary)] mb-6 text-sm">
-                                        Please provide your details before taking the assessment. This helps us personalize your experience.
-                                    </p>
-                                    <form onSubmit={handleContactSubmit} className="space-y-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                                            <input
-                                                type="text"
-                                                required
-                                                className="w-full p-3 border rounded-lg outline-none focus:border-[var(--primary)] bg-gray-50"
-                                                placeholder="Your Name"
-                                                value={contactData.name}
-                                                onChange={(e) => setContactData({ ...contactData, name: e.target.value })}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Phone or Email</label>
-                                            <input
-                                                type="text"
-                                                required
-                                                className="w-full p-3 border rounded-lg outline-none focus:border-[var(--primary)] bg-gray-50"
-                                                placeholder="e.g 0712... or email@example.com"
-                                                value={contactData.contact}
-                                                onChange={(e) => setContactData({ ...contactData, contact: e.target.value })}
-                                            />
-                                        </div>
-                                        <button type="submit" className="btn-primary w-full py-3 mt-2 justify-center">
-                                            Continue
-                                        </button>
-                                    </form>
-                                </motion.div>
-                            )}
-
-                            {step === 2 && (
                                 <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-                                    <h4 className="text-xl font-bold mb-4 text-[var(--text-primary)]">Select an Assessment</h4>
+                                    <h4 className="text-xl font-bold mb-1 text-[var(--text-primary)]">Select an Assessment</h4>
+                                    <p className="text-sm text-[var(--text-secondary)] mb-4">Free, anonymous and takes a few minutes.</p>
                                     <div className="space-y-3">
                                         {tests.map(test => (
                                             <button
                                                 key={test.id}
                                                 onClick={() => handleTestSelect(test)}
-                                                className="w-full flex items-center p-4 border rounded-xl hover:border-[var(--primary)] hover:bg-blue-50 transition text-left group"
+                                                className="w-full flex items-center p-4 border rounded-xl hover:border-[var(--primary)] hover:bg-teal-50 transition text-left group"
                                             >
-                                                <div className="w-10 h-10 rounded-full bg-blue-100 text-[var(--primary)] flex items-center justify-center mr-4 group-hover:bg-[var(--primary)] group-hover:text-white transition">
+                                                <div className="w-10 h-10 rounded-full bg-teal-50 text-[var(--primary)] flex items-center justify-center mr-4 group-hover:bg-[var(--primary)] group-hover:text-white transition">
                                                     {test.icon}
                                                 </div>
                                                 <span className="font-semibold text-gray-700">{test.name}</span>
                                             </button>
                                         ))}
                                     </div>
-                                    <button
-                                        onClick={() => setStep(1)}
-                                        className="mt-6 text-sm text-[var(--text-secondary)] hover:text-[var(--primary)]"
-                                    >
-                                        &larr; Back to details
-                                    </button>
                                 </motion.div>
                             )}
 
-                            {step === 3 && selectedTest && (
+                            {step === 2 && selectedTest && (
                                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                                     <div className="text-center mb-6">
-                                        <FiAlertCircle className="text-4xl text-yellow-500 mx-auto mb-3" />
-                                        <h4 className="text-xl font-bold text-[var(--text-primary)]">Consent Required</h4>
+                                        <FiLock className="text-4xl text-[var(--primary)] mx-auto mb-3" />
+                                        <h4 className="text-xl font-bold text-[var(--text-primary)]">{selectedTest.name}</h4>
                                     </div>
 
-                                    <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100 text-sm text-yellow-800 mb-6 space-y-2 text-left">
-                                        <p><strong>Please Note:</strong> This {selectedTest.name} questionnaire is a screening tool for informational purposes only.</p>
-                                        <p>It is not a medical diagnosis. Your results are confidential and should be discussed with a professional.</p>
+                                    <div className="bg-[var(--gold-soft)] p-4 rounded-lg border border-[var(--border-color)] text-sm text-[var(--text-primary)] mb-6 space-y-2 text-left">
+                                        <p><strong>Private and anonymous.</strong> We don't ask who you are, and your answers stay on this device. Nothing is sent to us unless you choose to request a call back at the end.</p>
+                                        <p>This is a screening tool for information only, not a medical diagnosis. We encourage you to discuss your result with a professional.</p>
                                     </div>
 
                                     <div className="flex gap-3">
                                         <button
-                                            onClick={() => setStep(2)}
+                                            onClick={() => setStep(1)}
                                             className="flex-1 py-3 border rounded-lg font-semibold hover:bg-gray-50 transition"
                                         >
-                                            Cancel
+                                            Choose another
                                         </button>
                                         <button
                                             onClick={handleConsent}
                                             className="flex-1 py-3 btn-primary justify-center font-bold"
                                         >
-                                            I Consent, Start
+                                            I Understand, Start
                                         </button>
                                     </div>
                                 </motion.div>
@@ -172,7 +125,7 @@ const AssessmentModal = ({ isOpen, onClose }) => {
 
                         {/* Step Indicator */}
                         <div className="flex px-6 pb-6 gap-2 justify-center">
-                            {[1, 2, 3].map(i => (
+                            {[1, 2].map(i => (
                                 <div
                                     key={i}
                                     className={`h-1 flex-1 rounded-full transition-colors ${i <= step ? 'bg-[var(--primary)]' : 'bg-gray-200'}`}

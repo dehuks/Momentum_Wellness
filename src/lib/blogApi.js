@@ -20,10 +20,19 @@ async function request(path, options = {}) {
         throw new Error("Could not reach the server. Check your connection and try again.");
     }
 
-    const data = await res.json().catch(() => ({}));
+    // A silent redirect landing somewhere other than our own API (e.g. a
+    // misconfigured server routing the request elsewhere) is never valid for
+    // this endpoint - treat it as a hard failure rather than parsing whatever
+    // HTML came back.
+    if (res.redirected && !res.url.includes(BASE)) {
+        console.error(`Unexpected redirect calling ${path}: landed on ${res.url}`);
+        throw new Error("The server sent back something unexpected. Please try again shortly.");
+    }
 
-    if (!res.ok || data.success === false) {
-        throw new Error(data.error || `Request failed (${res.status})`);
+    const data = await res.json().catch(() => null);
+
+    if (!res.ok || data === null || data.success !== true) {
+        throw new Error((data && data.error) || `Request failed (${res.status})`);
     }
 
     return data;
@@ -133,5 +142,23 @@ export const blogApi = {
 
     async resetSiteImage(key) {
         return request(`site_images.php?key=${encodeURIComponent(key)}`, { method: "DELETE" });
+    },
+
+    // --- Service "Learn More" gallery (public read, admin write) ---
+    async getServiceGallery(key) {
+        const data = await request(`service_gallery.php?key=${encodeURIComponent(key)}`);
+        return data.images;
+    },
+
+    async addServiceGalleryImage(serviceKey, imageUrl, caption) {
+        return jsonRequest("service_gallery.php", "POST", { service_key: serviceKey, image_url: imageUrl, caption });
+    },
+
+    async updateServiceGalleryCaption(id, caption) {
+        return jsonRequest("service_gallery.php", "PUT", { id, caption });
+    },
+
+    async deleteServiceGalleryImage(id) {
+        return request(`service_gallery.php?id=${id}`, { method: "DELETE" });
     },
 };

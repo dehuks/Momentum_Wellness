@@ -1,23 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FiCheckCircle, FiAlertTriangle, FiRefreshCw, FiArrowLeft } from 'react-icons/fi';
-import { Link, useLocation } from 'react-router-dom';
-import { sendEmail, formatAssessmentResult } from '../utils/emailService';
+import { Link } from 'react-router-dom';
+import AssessmentFollowUp from '../components/AssessmentFollowUp';
 
 const BurnoutQuestionnaire = () => {
     const [answers, setAnswers] = useState({});
     const [result, setResult] = useState(null);
-    const [emailStatus, setEmailStatus] = useState(null); // 'sending', 'sent', 'error'
     const topRef = useRef(null);
-    const location = useLocation();
-    const contactData = location.state?.contactData;
 
+    // Scroll after the result (or reset form) has rendered: scrolling inside the click
+    // handler ran before the page shrank, and phones cancelled the half-finished scroll.
     useEffect(() => {
-        // Scroll to top on mount
-        if (topRef.current) {
-            topRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    }, []);
+        topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, [result]);
 
     const questions = [
         // Emotional Exhaustion (EE) - 9 items
@@ -63,7 +59,7 @@ const BurnoutQuestionnaire = () => {
         setAnswers(prev => ({ ...prev, [questionId]: value }));
     };
 
-    const calculateScore = async () => {
+    const calculateScore = () => {
         let eeScore = 0;
         let dpScore = 0;
         let paScore = 0;
@@ -97,45 +93,14 @@ const BurnoutQuestionnaire = () => {
         setResult({
             scores: { ee: eeScore, dp: dpScore, pa: paScore },
             interpretation: interpretationText,
-            colorClass
+            colorClass,
+            concerning: eeScore >= 17 || dpScore >= 4
         });
-
-        // Send email if contact data exists
-        if (contactData) {
-            setEmailStatus('sending');
-            const message = formatAssessmentResult(
-                "Maslach's Burnout Inventory",
-                { "Emotional Exhaustion": eeScore, "Depersonalization": dpScore, "Personal Accomplishment": paScore },
-                interpretationText
-            );
-
-            try {
-                await sendEmail({
-                    name: contactData.name,
-                    email: contactData.contact.includes('@') ? contactData.contact : 'Not provided',
-                    phone: contactData.contact,
-                    message: message,
-                    title: "Burnout Assessment Result"
-                });
-                setEmailStatus('sent');
-            } catch (error) {
-                console.error("Failed to send email", error);
-                setEmailStatus('error');
-            }
-        }
-
-        if (topRef.current) {
-            topRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
     };
 
     const resetTest = () => {
         setAnswers({});
         setResult(null);
-        setEmailStatus(null);
-        if (topRef.current) {
-            topRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
     };
 
     const isComplete = questions.every(q => answers[q.id] !== undefined);
@@ -232,15 +197,19 @@ const BurnoutQuestionnaire = () => {
                                     </p>
                                 </div>
 
-                                {emailStatus === 'sending' && (
-                                    <p className="text-blue-500 mb-4 animate-pulse">Sending results...</p>
-                                )}
-                                {emailStatus === 'sent' && (
-                                    <p className="text-green-600 mb-4 font-bold">Results sent successfully!</p>
-                                )}
-                                {emailStatus === 'error' && (
-                                    <p className="text-red-500 mb-4">Could not send results automatically.</p>
-                                )}
+                                <div className="mb-8">
+                                    <AssessmentFollowUp
+                                        testName="Burnout (Maslach's Burnout Inventory)"
+                                        emailTitle="Burnout Assessment"
+                                        scoreData={{
+                                            'Emotional Exhaustion': result.scores.ee,
+                                            'Depersonalization': result.scores.dp,
+                                            'Personal Accomplishment': result.scores.pa,
+                                        }}
+                                        interpretation={result.interpretation}
+                                        concerning={result.concerning}
+                                    />
+                                </div>
 
                                 <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-8 text-left text-sm text-blue-900 mx-auto max-w-2xl">
                                     <div className="flex items-start">

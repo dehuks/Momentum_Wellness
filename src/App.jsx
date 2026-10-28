@@ -1,5 +1,6 @@
 import React from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { MotionConfig } from 'framer-motion';
 import PublicLayout from './components/PublicLayout';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -26,6 +27,8 @@ import { BlogAuthProvider } from './context/BlogAuthContext';
 const App = () => {
   return (
     <Router>
+      {/* Honour the OS "reduce motion" setting for every Framer Motion animation */}
+      <MotionConfig reducedMotion="user">
       <BlogAuthProvider>
         <Routes>
           {/* Public marketing site - Header + Footer */}
@@ -72,6 +75,7 @@ const App = () => {
           </Route>
         </Routes>
       </BlogAuthProvider>
+      </MotionConfig>
     </Router>
   );
 };

@@ -12,6 +12,7 @@ const ServiceDetail = () => {
   const service = getServiceByKey(key);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageOverrides, setImageOverrides] = useState({});
+  const [gallery, setGallery] = useState([]);
 
   useEffect(() => {
     blogApi
@@ -19,6 +20,14 @@ const ServiceDetail = () => {
       .then(setImageOverrides)
       .catch((err) => console.error('Error loading site images:', err));
   }, []);
+
+  useEffect(() => {
+    if (!key) return;
+    blogApi
+      .getServiceGallery(key)
+      .then(setGallery)
+      .catch((err) => console.error('Error loading service gallery:', err));
+  }, [key]);
 
   if (!service) {
     return (
@@ -91,26 +100,35 @@ const ServiceDetail = () => {
           {service.details}
         </motion.p>
 
-        {service.gallery && service.gallery.length > 0 && (
+        {gallery.length > 0 && (
           <div className="mb-12">
             <h2 className="text-xl font-semibold mb-4" style={{ color: '#134E4A' }}>
               {service.title} in Action
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {service.gallery.map((src, i) => (
-                <motion.img
-                  key={i}
-                  src={src}
-                  alt={`${service.title} activity ${i + 1}`}
-                  className="w-full h-72 md:h-80 object-cover object-top rounded-2xl"
-                  style={{ boxShadow: 'var(--shadow-light)' }}
-                  loading="lazy"
-                  decoding="async"
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {gallery.map((item, i) => (
+                <motion.figure
+                  key={item.id}
+                  className="m-0"
                   initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
-                />
+                >
+                  <img
+                    src={item.image_url}
+                    alt={item.caption || `${service.title} activity ${i + 1}`}
+                    className="w-full h-72 md:h-80 object-cover object-top rounded-2xl"
+                    style={{ boxShadow: 'var(--shadow-light)' }}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  {item.caption && (
+                    <figcaption className="mt-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                      {item.caption}
+                    </figcaption>
+                  )}
+                </motion.figure>
               ))}
             </div>
           </div>

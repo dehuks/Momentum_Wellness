@@ -1,17 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SectionTitle from '../components/SectionTitle';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiChevronDown } from 'react-icons/fi';
 import serviceImage from '../assets/services.png?format=webp';
-import AppointmentModal from '../AppointmentModal';
 import { services } from '../data/services';
 import { blogApi } from '../lib/blogApi';
 
+const faqs = [
+  {
+    question: "How do I know which service is right for me?",
+    answer: "We recommend starting with an initial consultation where our specialists will assess your needs and recommend the most appropriate services. You can also call our helpline for guidance before booking."
+  },
+  {
+    question: "Is my information kept confidential?",
+    answer: "Yes. Everything you share with us is treated as strictly confidential and is only shared with the professionals directly involved in your care. We will not contact your employer or family without your consent, except in the rare cases where the law requires us to act to keep you or someone else safe."
+  },
+  {
+    question: "How much does treatment cost, and do you accept insurance?",
+    answer: "Costs depend on the programme and the length of care you need, so we'll give you a clear quote after your initial assessment. We work with a number of insurance providers. Contact us with your insurance details and we'll confirm what your cover includes."
+  },
+  {
+    question: "How does the home-based detox programme work?",
+    answer: "Our home-based detox lets you withdraw safely in the privacy of your own home, under medical supervision. You receive a personalised recovery plan, regular medical monitoring and 24/7 professional support throughout. We first assess whether detoxing at home is safe for you; if it isn't, we'll recommend inpatient care instead."
+  },
+  {
+    question: "How long does treatment typically last?",
+    answer: "Treatment duration varies based on individual needs. Some clients see improvement in 4-6 sessions, while others benefit from longer-term therapy or a residential stay. Your care team will discuss a treatment plan with you during your first session."
+  },
+  {
+    question: "Can my family be involved in my recovery?",
+    answer: "Yes, with your permission. Recovery is often stronger with the support of loved ones, and we can involve family members in planning your care. Ask our team about visiting arrangements if you are receiving inpatient treatment."
+  },
+  {
+    question: "Do you offer online sessions?",
+    answer: "Yes. Our counselling services are available both in person and online, so you can get support wherever you are in Kenya."
+  },
+  {
+    question: "What happens after my treatment ends?",
+    answer: "Recovery continues after treatment. Before you finish, we'll work with you on a plan for staying well, which can include ongoing counselling and regular check-ins with our team. Our support line is available 24/7 if you ever need us."
+  },
+];
+
 const Services = () => {
   const navigate = useNavigate();
+  const [openFaq, setOpenFaq] = useState(null);
   const location = useLocation();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState(null);
   const [imageOverrides, setImageOverrides] = useState({});
 
   useEffect(() => {
@@ -30,24 +64,6 @@ const Services = () => {
     }
   }, [location.hash]);
 
-  const handleOpenModal = (serviceTitle) => {
-    setSelectedService(serviceTitle);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedService(null);
-  };
-
-  const handleLearnMore = (service) => {
-    if (service.gallery && service.gallery.length > 0) {
-      navigate(`/services/${service.key}`);
-    } else {
-      handleOpenModal(service.title);
-    }
-  };
-
   return (
     <div className="px-4 md:px-10 lg:px-20 flex flex-1 justify-center py-5 bg-[var(--light-bg)]">
       <div className="layout-content-container flex flex-col max-w-6xl flex-1 text-[var(--text-primary)]">
@@ -59,7 +75,7 @@ const Services = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <SectionTitle>Our Services</SectionTitle>
+            <SectionTitle className="page-title">Our Services</SectionTitle>
           </motion.div>
 
           <motion.p
@@ -86,7 +102,7 @@ const Services = () => {
         {/* Services Grid */}
         <SectionTitle>Comprehensive Mental Health Services</SectionTitle>
         <p className="content-text mb-8 text-[var(--text-secondary)]">
-          At Momentum Wellness, we provide a full spectrum of mental health services delivered by experienced professionals.
+          At Mowet Kenya, we provide a full spectrum of mental health services delivered by experienced professionals.
           Our evidence-based approaches are designed to address the unique needs of each individual, helping you achieve sustainable
           mental wellness and improved quality of life.
         </p>
@@ -128,7 +144,7 @@ const Services = () => {
                   <p className="service-description mb-3 text-[var(--text-secondary)]">{service.description}</p>
                   <p className="text-[var(--text-secondary)] text-sm">{service.details}</p>
                   <button
-                    onClick={() => handleLearnMore(service)}
+                    onClick={() => navigate(`/services/${service.key}`)}
                     className="btn-primary mt-4 w-full block text-center"
                   >
                     <span>Learn More</span>
@@ -144,49 +160,53 @@ const Services = () => {
           <SectionTitle>Frequently Asked Questions</SectionTitle>
         </div>
         <div className="mb-12">
-          {[
-            {
-              question: "How do I know which service is right for me?",
-              answer: "We recommend starting with an initial consultation where our specialists will assess your needs and recommend the most appropriate services. You can also call our helpline for guidance before booking."
-            },
-            {
-              question: "Do you accept insurance?",
-              answer: "Yes, we work with most major insurance providers in Kenya. Please contact our billing department with your insurance details to verify coverage."
-            },
-            {
-              question: "What safety measures are in place for in-person sessions?",
-              answer: "We follow strict health protocols including sanitization, mask requirements, and social distancing. Telehealth options are also available for all counseling services."
-            },
-            {
-              question: "How long does treatment typically last?",
-              answer: "Treatment duration varies based on individual needs. Some clients see improvement in 4-6 sessions, while others benefit from longer-term therapy. Your therapist will discuss a treatment plan during your first session."
-            },
-          ].map((faq, index) => (
-            <motion.div
-              key={index}
-              className="border-b border-[var(--border-color)] py-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-            >
-              <div className="flex justify-between items-center cursor-pointer">
-                <h3 className="font-medium text-lg text-[var(--text-primary)]">{faq.question}</h3>
-                <svg className="w-5 h-5 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-              <p className="text-[var(--text-secondary)] mt-2">{faq.answer}</p>
-            </motion.div>
-          ))}
+          {faqs.map((faq, index) => {
+            const isOpen = openFaq === index;
+            return (
+              <motion.div
+                key={faq.question}
+                className="border-b border-[var(--border-color)]"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+              >
+                <h3>
+                  <button
+                    type="button"
+                    id={`faq-q-${index}`}
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-a-${index}`}
+                    onClick={() => setOpenFaq(isOpen ? null : index)}
+                    className="w-full flex justify-between items-center gap-4 py-4 text-left font-medium text-lg text-[var(--text-primary)] hover:text-[var(--primary)] transition-colors"
+                  >
+                    {faq.question}
+                    <FiChevronDown
+                      className={`w-5 h-5 shrink-0 text-[var(--primary)] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+                      aria-hidden="true"
+                    />
+                  </button>
+                </h3>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      id={`faq-a-${index}`}
+                      role="region"
+                      aria-labelledby={`faq-q-${index}`}
+                      className="overflow-hidden"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                    >
+                      <p className="text-[var(--text-secondary)] pb-5 pr-9 leading-relaxed">{faq.answer}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
-
-      {/* Appointment Modal */}
-      <AppointmentModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        serviceName={selectedService}
-      />
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { FiCheckCircle, FiXCircle, FiArrowLeft, FiAlertTriangle, FiRefreshCw } from "react-icons/fi";
-import { Link, useLocation } from 'react-router-dom';
-import { sendEmail, formatAssessmentResult } from '../utils/emailService';
+import { Link } from 'react-router-dom';
+import AssessmentFollowUp from '../components/AssessmentFollowUp';
 
 const questions = [
   { id: 1, text: "Have you ever felt you should Cut down on your drinking?" },
@@ -17,59 +17,28 @@ const questions = [
 const CageQuestionnaire = () => {
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
-  const [emailStatus, setEmailStatus] = useState(null);
 
   const topRef = useRef(null);
-  const location = useLocation();
-  const contactData = location.state?.contactData;
+  const score = Object.values(answers).filter((ans) => ans === "yes").length;
+  const highRisk = score >= 2;
 
+  // Scroll after the result (or reset form) has rendered: scrolling inside the click
+  // handler ran before the page shrank, and phones cancelled the half-finished scroll.
   useEffect(() => {
-    if (topRef.current) {
-      topRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, []);
+    topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [submitted]);
 
   const handleAnswer = (id, value) => {
     setAnswers((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     setSubmitted(true);
-    const score = Object.values(answers).filter((ans) => ans === "yes").length;
-    const interpretation = score >= 2 ? "High Risk (Potential alcohol concerns)" : "Low Risk";
-
-    // Send email if contact data exists
-    if (contactData) {
-      setEmailStatus('sending');
-      const message = formatAssessmentResult("Alcohol Use (CAGE)", score, interpretation);
-
-      try {
-        await sendEmail({
-          name: contactData.name,
-          email: contactData.contact.includes('@') ? contactData.contact : 'Not provided',
-          phone: contactData.contact,
-          message: message,
-          title: "CAGE Assessment Result"
-        });
-        setEmailStatus('sent');
-      } catch (error) {
-        console.error("Failed to send email", error);
-        setEmailStatus('error');
-      }
-    }
-
-    if (topRef.current) {
-      topRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
   };
 
   const resetTest = () => {
     setAnswers({});
     setSubmitted(false);
-    setEmailStatus(null);
-    if (topRef.current) {
-      topRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
   };
 
   return (
@@ -140,13 +109,14 @@ const CageQuestionnaire = () => {
                 </div>
               </>
             ) : (
+              <>
               <motion.div
                 className="p-10 rounded-2xl shadow-xl text-center text-white"
                 style={{ background: "var(--gradient-primary)" }}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
               >
-                {Object.values(answers).filter((ans) => ans === "yes").length >= 2 ? (
+                {highRisk ? (
                   <div>
                     <FiXCircle className="w-16 h-16 mx-auto mb-4 text-red-200" />
                     <h2 className="text-2xl font-bold mb-2">High Risk</h2>
@@ -166,18 +136,6 @@ const CageQuestionnaire = () => {
                   </div>
                 )}
 
-                <div className="my-6">
-                  {emailStatus === 'sending' && (
-                    <p className="text-white mb-4 animate-pulse">Sending results...</p>
-                  )}
-                  {emailStatus === 'sent' && (
-                    <p className="text-white mb-4 font-bold">Results sent successfully!</p>
-                  )}
-                  {emailStatus === 'error' && (
-                    <p className="text-red-200 mb-4">Could not send results automatically.</p>
-                  )}
-                </div>
-
                 <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
                   <button
                     className="inline-flex items-center justify-center px-6 py-3 bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition"
@@ -193,6 +151,15 @@ const CageQuestionnaire = () => {
                   </Link>
                 </div>
               </motion.div>
+
+              <AssessmentFollowUp
+                testName="Alcohol Use (CAGE)"
+                emailTitle="CAGE Assessment"
+                scoreData={score}
+                interpretation={highRisk ? "High Risk (Potential alcohol concerns)" : "Low Risk"}
+                concerning={highRisk}
+              />
+              </>
             )}
           </div>
         </div>

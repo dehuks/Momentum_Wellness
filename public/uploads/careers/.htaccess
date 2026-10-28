@@ -1,0 +1,8 @@
+# Uploaded CVs/cover letters must never be executable, even if a malicious
+# file slips past the type validation in careers_submit.php.
+php_flag engine off
+Options -Indexes
+
+<FilesMatch "\.(php|phtml|php\d?)$">
+    Require all denied
+</FilesMatch>

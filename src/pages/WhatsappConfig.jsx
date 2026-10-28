@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 const WHATSAPP_CONFIG = {
   // Replace with your actual WhatsApp Business number (Kenyan format: 254XXXXXXXXX)
   phoneNumber: '254720200220', // CHANGE THIS TO YOUR NUMBER
-  defaultMessage: 'Hello MOWET Kenya! I would like to book an appointment for mental wellness services.',
+  defaultMessage: 'Hello Mowet Kenya! I would like to book an appointment for mental wellness services.',
 };
 
 // --- Utility Function ---
@@ -42,13 +42,39 @@ export const WhatsAppButton = ({
 
 // --- 2. Floating WhatsApp Widget ---
 // This uses internal CSS for complex animations (pulse and fade-in).
-export const WhatsAppFloat = () => {
+// avoidRef (optional): an element the button must never cover. While that element
+// passes under the button's corner (e.g. full-width buttons on a phone), the
+// button fades out and reappears once the element has scrolled clear.
+export const WhatsAppFloat = ({ avoidRef = null }) => {
   const [isVisible, setIsVisible] = React.useState(false);
+  const [isTucked, setIsTucked] = React.useState(false);
 
   React.useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 1000);
     return () => clearTimeout(timer);
   }, []);
+
+  React.useEffect(() => {
+    if (!avoidRef) return undefined;
+    // One getBoundingClientRect per scroll event is cheap, and React skips the
+    // re-render when the tucked state hasn't changed
+    const check = () => {
+      const el = avoidRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      // Corner the button occupies, with a little breathing room (see .whatsapp-float)
+      const zoneTop = window.innerHeight - 100;
+      const zoneLeft = window.innerWidth - 100;
+      setIsTucked(r.bottom > zoneTop && r.top < window.innerHeight && r.right > zoneLeft);
+    };
+    check();
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check);
+    return () => {
+      window.removeEventListener('scroll', check);
+      window.removeEventListener('resize', check);
+    };
+  }, [avoidRef]);
 
   if (!isVisible) return null;
 
@@ -59,9 +85,12 @@ export const WhatsAppFloat = () => {
       rel="noopener noreferrer"
       className="whatsapp-float"
       aria-label="Chat on WhatsApp"
+      aria-hidden={isTucked || undefined}
+      tabIndex={isTucked ? -1 : undefined}
+      style={{ pointerEvents: isTucked ? 'none' : 'auto' }}
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      animate={isTucked ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
+      transition={{ duration: isTucked ? 0.2 : 0.5 }}
     >
       <FaWhatsapp className="whatsapp-icon" />
       <span className="whatsapp-pulse"></span>

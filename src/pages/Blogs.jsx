@@ -91,9 +91,9 @@ const Blog = () => {
     <main className="px-4 md:px-10 lg:px-20 py-12 min-h-[70vh]" style={{ backgroundColor: "var(--light-bg)" }}>
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col items-center text-center gap-4">
-          <SectionTitle>Our Blog</SectionTitle>
+          <SectionTitle className="page-title">Our Blog</SectionTitle>
           <p className="page-description max-w-2xl" style={{ color: "var(--text-secondary)" }}>
-            Insights, stories, and expert perspectives on mental health and wellness from the Momentum Wellness team.
+            Insights, stories, and expert perspectives on mental health and wellness from the Mowet Kenya team.
           </p>
         </div>
 

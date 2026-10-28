@@ -10,20 +10,11 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <img src={logo} alt="MOWET Kenya Logo" className="h-10 w-auto" loading="lazy" decoding="async" />
-              <div className="flex flex-col leading-tight">
-                <h3 className="text-base font-bold text-[var(--text-primary)]">
-                  MOWET Kenya
-                </h3>
-                <span className="text-[10px] font-semibold tracking-widest text-[var(--primary)] uppercase">
-                  Momentum Wellness
-                </span>
-              </div>
-            </div>
+            <img src={logo} alt="Mowet Kenya – Compassionate Recovery" className="h-20 w-auto" loading="lazy" decoding="async" />
             <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
-              Empowering communities through comprehensive mental health and wellness programs. 
-              Building resilience, fostering growth, and creating lasting positive change.
+              Compassionate, evidence-based care for addiction and mental health recovery in Kenya.
+              From home-based detox and inpatient rehabilitation to counselling, we walk with you
+              and your loved ones every step of the way.
             </p>
           </div>
 
@@ -227,7 +218,7 @@ const Footer = () => {
         <div className="border-t border-[var(--border-color)] pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-[var(--text-secondary)] text-sm">
-              © 2026 Momentum Wellness Trust. All rights reserved.
+              © 2026 Mowet Kenya, a service of Momentum Wellness Trust. All rights reserved.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-6">
               {[

@@ -69,7 +69,7 @@ const Careers = () => {
 
     return (
         <section
-            className="py-16 px-4 md:px-10 lg:px-20"
+            className="pt-10 pb-16 px-4 md:px-10 lg:px-20"
             style={{ backgroundColor: "var(--light-bg)", color: "var(--text-primary)" }}
         >
             <motion.div
@@ -78,7 +78,7 @@ const Careers = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.55 }}
             >
-                <h2 className="section-title">Work With Us</h2>
+                <h2 className="section-title page-title">Work With Us</h2>
                 <p className="page-description">
                     Join our team and help us make a difference in mental wellness.
                     We are looking for passionate individuals to join our mission.

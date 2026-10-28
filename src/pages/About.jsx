@@ -46,7 +46,7 @@ const About = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <SectionTitle>About Us</SectionTitle>
+            <SectionTitle className="page-title">About Us</SectionTitle>
           </motion.div>
 
           <motion.p 
@@ -55,12 +55,12 @@ const About = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            Momentum Wellness is a leading mental health service provider in Kenya, dedicated to promoting emotional well-being and resilience. Our team of experienced professionals offers comprehensive care tailored to individual needs.
+            Mowet Kenya is a leading mental health service provider in Kenya, dedicated to promoting emotional well-being and resilience. Our team of experienced professionals offers comprehensive care tailored to individual needs.
           </motion.p>
 
           <motion.img
             src={aboutImage2}
-            alt="About Momentum Wellness"
+            alt="About Mowet Kenya"
             className="rounded-xl w-full max-w-4xl h-72 md:h-96 object-cover shadow-md"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -72,7 +72,7 @@ const About = () => {
         {/* Background Section */}
         <SectionTitle>Our Background</SectionTitle>
         <p className="content-text text-center text-[var(--text-secondary)]">
-          Founded in 2018, Momentum Wellness emerged from a shared vision among a group of mental health experts 
+          Founded in 2018, Mowet Kenya emerged from a shared vision among a group of mental health experts 
           to address the growing need for accessible and quality mental health services in Kenya. 
           We recognized the stigma surrounding mental health and aimed to create a safe, supportive environment 
           where individuals could seek help without fear or judgment. Over the years, we have expanded our 
@@ -83,7 +83,7 @@ const About = () => {
         <div className="flex w-full my-6">
           <img
             src={aboutImage}
-            alt="Momentum Wellness Facility"
+            alt="Mowet Kenya Facility"
             className="rounded-xl w-full h-64 md:h-96 object-cover shadow-md"
             loading="lazy"
             decoding="async"
@@ -122,7 +122,7 @@ const About = () => {
         {/* Core Beliefs */}
         <SectionTitle>Our Core Beliefs</SectionTitle>
         <p className="content-text text-center text-[var(--text-secondary)]">
-          At Momentum Wellness, we believe that mental health is essential to overall well-being. We are committed to providing personalized care that addresses the unique needs of each individual. Our approach is holistic, focusing on the interconnectedness of mind, body, and spirit. We believe in the power of resilience and the capacity of individuals to overcome challenges and lead fulfilling lives.
+          At Mowet Kenya, we believe that mental health is essential to overall well-being. We are committed to providing personalized care that addresses the unique needs of each individual. Our approach is holistic, focusing on the interconnectedness of mind, body, and spirit. We believe in the power of resilience and the capacity of individuals to overcome challenges and lead fulfilling lives.
         </p>
 
         {/* Team Section (optional placeholder) */}

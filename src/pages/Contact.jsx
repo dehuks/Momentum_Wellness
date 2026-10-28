@@ -106,7 +106,7 @@ const Contact = () => {
 
   return (
     <section
-      className="py-16 px-4 md:px-10 lg:px-20"
+      className="pt-10 pb-16 px-4 md:px-10 lg:px-20"
       style={{ backgroundColor: "var(--light-bg)", color: "var(--text-primary)" }}
     >
       {/* Heading */}
@@ -116,7 +116,7 @@ const Contact = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.55 }}
       >
-        <h2 className="section-title">Contact Us</h2>
+        <h2 className="section-title page-title">Contact Us</h2>
         <p className="page-description">
           We're here to help. Reach out to us with any questions or to schedule an appointment.
           Our team typically responds within 24 hours.

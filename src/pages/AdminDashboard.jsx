@@ -64,9 +64,9 @@ const AdminDashboard = () => {
                         </thead>
                         <tbody>
                             {applications.map((app) => (
-                                <tr key={app.$id} className="border-b last:border-0" style={{ borderColor: "var(--border-color)" }}>
+                                <tr key={app.id} className="border-b last:border-0" style={{ borderColor: "var(--border-color)" }}>
                                     <td className="p-4 text-sm" style={{ color: "var(--text-secondary)" }}>
-                                        {app.$createdAt ? new Date(app.$createdAt).toLocaleDateString() : "-"}
+                                        {app.created_at ? new Date(app.created_at).toLocaleDateString() : "-"}
                                     </td>
                                     <td className="p-4 font-medium" style={{ color: "var(--text-primary)" }}>{app.name}</td>
                                     <td className="p-4">
@@ -78,9 +78,9 @@ const AdminDashboard = () => {
                                     </td>
                                     <td className="p-4 text-sm font-medium">
                                         <div className="flex flex-col gap-2">
-                                            {app.cvField && (
+                                            {app.cv_path && (
                                                 <a
-                                                    href={careersService.getFileDownloadUrl(app.cvField)}
+                                                    href={app.cv_path}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-center gap-1.5"
@@ -89,9 +89,9 @@ const AdminDashboard = () => {
                                                     <FiDownload className="w-3.5 h-3.5" /> Download CV
                                                 </a>
                                             )}
-                                            {app.coverLettterFieldId && (
+                                            {app.cover_letter_path && (
                                                 <a
-                                                    href={careersService.getFileDownloadUrl(app.coverLettterFieldId)}
+                                                    href={app.cover_letter_path}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-center gap-1.5"
